@@ -126,7 +126,7 @@ class Mic(object):
             with self._write_frames_to_file(frames) as f:
                 try:
                     self._transcribed = self.passive_stt_engine.transcribe(f)
-                    print( "Transcribed: %r" % self._transcribed )
+                    #print( "Transcribed: %r" % self._transcribed )
                 except:
                     dbg = (self._logger.getEffectiveLevel() == logging.DEBUG)
                     self._logger.error("Transcription failed!", exc_info=dbg)
@@ -163,8 +163,8 @@ class Mic(object):
             if keyword_uttered.is_set():
                 if self._logger.isEnabledFor(logging.DEBUG):
                     self._logger.info("Keyword %s has been uttered", keyword)
-                else:
-                    print(">> %r" % self._transcribed)
+                #else:
+                    #print(">>> %r" % self._transcribed)
                 return self._transcribed
             frames.append(frame)
             if not recording:
@@ -205,7 +205,8 @@ class Mic(object):
         response=self.wait_for_keyword(self._keyword)
         # What I really want to do here is check to see if there is a speechhandler plugin keyword
         # here. If so, handle it, if not then start actively listening.
-        if( response == [self._keyword.upper()] ):
+        # Brain.query(texts) seems like an obvious choice here, but I'm not sure how to get back to brain from here.
+        if(( response == [self._keyword.upper()] )or( response == ["GUIDE "+self._keyword.upper()] )):
             self._logger.debug("Active Listen")
             response=self.active_listen()
         self._logger.debug( "<< "+str(response) )
