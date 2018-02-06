@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import random
+import os
 from jasper import plugin
 
 
@@ -18,6 +18,7 @@ class ShutdownPlugin(plugin.SpeechHandlerPlugin):
         mic -- used to interact with the user (for both input and output)
         """
         mic.say('Shutting down')
+        os.system('sudo /sbin/shutdown -h now')
         quit()
         
     def is_valid(self, text):
