@@ -9,7 +9,7 @@ class FrotzPlugin(plugin.SpeechHandlerPlugin):
     def get_phrases(self):
         return [
             self.gettext("BEGIN SIMULATION ZORK ONE"),
-            self.gettext("BEGIN SIMULATION A MIND FOREVER VOYAGING"),
+            self.gettext("BEGIN SIMULATION MIND FOREVER VOYAGING"),
             self.gettext("BEGIN SIMULATION HITCHHIKERS GUIDE"),
             self.gettext("BEGIN SIMULATION")
             ]
@@ -78,6 +78,14 @@ class FrotzPlugin(plugin.SpeechHandlerPlugin):
                 if not text:
                     #mic.say(_('Pardon?'))
                     continue
+                
+                # Here I have the chance to catch some commonly misheard phrases
+                if( "GO SELF" in text ):
+                    self._logger.debug('GO SELF corrected to GO SOUTH')
+                    text="GO SOUTH"
+                if( "WHERE ROBE" in text ):
+                    self._logger.debug('WHERE ROBE corrected to WEAR ROBE')
+                    text="WEAR ROBE"
 
                 if( "END SIMULATION" in text ):
                     mode_not_stopped = False
