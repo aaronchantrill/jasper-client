@@ -104,8 +104,7 @@ class PocketsphinxSTTPlugin(plugin.STTPlugin):
             self._decoder = pocketsphinx.Decoder(config)
         else:
             # Pocketsphinx v4 or sooner
-            self._decoder = pocketsphinx.Decoder(
-                hmm=hmm_dir, logfn=self._logfile, lm=lm_path, dict=dict_path)
+            self._decoder = pocketsphinx.Decoder(hmm=hmm_dir, logfn=self._logfile, lm=lm_path, dict=dict_path)
 
     def __del__(self):
         if self._logfile is not None:
