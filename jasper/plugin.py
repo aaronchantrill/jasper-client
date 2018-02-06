@@ -76,8 +76,7 @@ class STTPlugin(GenericPlugin):
             path=paths.config('vocabularies', language))
 
         if not vocabulary.matches_phrases(self._vocabulary_phrases):
-            vocabulary.compile(
-                self.profile, compilation_func, self._vocabulary_phrases)
+            vocabulary.compile(self.profile, compilation_func, self._vocabulary_phrases)
 
         self._vocabulary_path = vocabulary.path
         return self._vocabulary_path

@@ -22,7 +22,7 @@ class MeaningOfLifePlugin(plugin.SpeechHandlerPlugin):
         if( "THE ULTIMATE ANSWER" in text ):
             message = [ self.gettext( "Fourty two" ) ]
         else:
-            message = [ self.gettext("Well, it's nothing very special. Try and be nice to people, avoid eating fat, reed a good book every now and then, get some walking in, and try and live together in peace and harmony with people of all creeds and nations.") ]
+            message = [ self.gettext("It's nothing very complicated. Try and be nice to people, avoid eating fat, reed a good book every now and then, get some walking in, and try and live together in peace and harmony with people of all creeds and nations.") ]
 
         mic.say(message)
 
