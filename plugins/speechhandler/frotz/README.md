@@ -14,4 +14,5 @@ able to understand your requests to quit.
 
 When running, Jasper often fails to compile the language model so you may want to use the tool at 
 http://www.speech.cs.cmu.edu/tools/lmtool-new.html to compile the language model and dictionary from your corpus file, then
-just overwrite what Jasper came up with.
+just overwrite what Jasper came up with. The language model uses a checksum based on the corpus file, so as long as your
+corpus file doesn't change, Jasper won't try to overwrite it.
