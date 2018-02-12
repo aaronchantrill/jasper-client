@@ -1,0 +1,64 @@
+Language model created by QuickLM on Mon Feb 12 02:24:55 EST 2018
+Copyright (c) 1996-2010 Carnegie Mellon University and Alexander I. Rudnicky
+
+The model is in standard ARPA format, designed by Doug Paul while he was at MITRE.
+
+The code that was used to produce this language model is available in Open Source.
+Please visit http://www.speech.cs.cmu.edu/tools/ for more information
+
+The (fixed) discount mass is 0.5. The backoffs are computed using the ratio method.
+This model based on a corpus of 4 sentences and 13 words
+
+\data\
+ngram 1=13
+ngram 2=16
+ngram 3=12
+
+\1-grams:
+-1.0000 </s> -0.3010
+-1.0000 <s> -0.2553
+-1.6021 A -0.2900
+-1.6021 ARE -0.2900
+-1.6021 HOW -0.2900
+-1.3010 IS -0.2788
+-1.6021 IT -0.2553
+-1.6021 JASPER -0.2553
+-1.6021 TEST -0.2553
+-1.6021 THIS -0.2788
+-1.6021 TIME -0.2788
+-1.6021 WHAT -0.2900
+-1.6021 YOU -0.2553
+
+\2-grams:
+-0.9031 <s> HOW 0.0000
+-0.9031 <s> JASPER 0.0000
+-0.9031 <s> THIS 0.0000
+-0.9031 <s> WHAT 0.0000
+-0.3010 A TEST 0.0000
+-0.3010 ARE YOU 0.0000
+-0.3010 HOW ARE 0.0000
+-0.6021 IS A 0.0000
+-0.6021 IS IT 0.0000
+-0.3010 IT </s> -0.3010
+-0.3010 JASPER </s> -0.3010
+-0.3010 TEST </s> -0.3010
+-0.3010 THIS IS -0.1761
+-0.3010 TIME IS -0.1761
+-0.3010 WHAT TIME 0.0000
+-0.3010 YOU </s> -0.3010
+
+\3-grams:
+-0.3010 <s> HOW ARE
+-0.3010 <s> JASPER </s>
+-0.3010 <s> THIS IS
+-0.3010 <s> WHAT TIME
+-0.3010 A TEST </s>
+-0.3010 ARE YOU </s>
+-0.3010 HOW ARE YOU
+-0.3010 IS A TEST
+-0.3010 IS IT </s>
+-0.3010 THIS IS A
+-0.3010 TIME IS IT
+-0.3010 WHAT TIME IS
+
+\end\
