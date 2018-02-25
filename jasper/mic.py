@@ -53,6 +53,7 @@ class Mic(object):
         self._input_chunksize = get_config_value(config, 'input_chunksize',1024)
         self._output_chunksize = get_config_value(config, 'output_chunksize',1024)
         self._yes=tempfile.SpooledTemporaryFile()
+        # save a canned response. We will be saying "yes" a lot, no need to encode it each time.
         self._yes.write(self.tts_engine.say("yes"))
         try:
             output_padding = config['audio']['output_padding']
@@ -69,10 +70,8 @@ class Mic(object):
         self._logger.debug('Input sample width: %d bit', self._input_bits)
         self._logger.debug('Input channels: %d', self._input_channels)
         self._logger.debug('Input chunksize: %d frames', self._input_chunksize)
-        self._logger.debug('Output chunksize: %d frames',
-                           self._output_chunksize)
-        self._logger.debug('Output padding: %s',
-                           'yes' if self._output_padding else 'no')
+        self._logger.debug('Output chunksize: %d frames', self._output_chunksize)
+        self._logger.debug('Output padding: %s', 'yes' if self._output_padding else 'no')
 
         self._threshold = 2.0**self._input_bits
         self._transcribed = ""

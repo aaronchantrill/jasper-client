@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import logging
 import os
+import re
 import shutil
 import yaml
 import pkg_resources
@@ -9,6 +10,7 @@ import pdb
 from . import audioengine
 from . import brain
 from . import paths
+from . import populate
 from . import pluginstore
 from . import conversation
 from . import mic
@@ -60,17 +62,23 @@ class Jasper(object):
                     raise
 
         # Read config
-        self._logger.debug("Trying to read config file: '%s'", new_configfile)
-        try:
-            with open(new_configfile, "r") as f:
-                self.config = yaml.safe_load(f)
-        except OSError:
-            self._logger.error("Can't open config file: '%s'", new_configfile)
-            raise
-        except (yaml.parser.ParserError, yaml.scanner.ScannerError) as e:
-            self._logger.error("Unable to parse config file: %s %s",
-                               e.problem.strip(), str(e.problem_mark).strip())
-            raise
+        config_read=False
+        while( not config_read ):
+            self._logger.debug("Trying to read config file: '%s'", new_configfile)
+            try:
+                with open(new_configfile, "r") as f:
+                    self.config = yaml.safe_load(f)
+                    config_read=True
+            except OSError:
+                self._logger.error("Can't open config file: '%s'", new_configfile)
+                #raise
+                input=raw_input("Your config file does not exist. Would you like to answer a few questions to create a new one? ")
+                if( re.match(r'\s*[Yy]',input) ):
+                    populate.populate_profile()
+            except (yaml.parser.ParserError, yaml.scanner.ScannerError) as e:
+                self._logger.error("Unable to parse config file: %s %s",
+                                e.problem.strip(), str(e.problem_mark).strip())
+                raise
 
         try:
             language = self.config['language']

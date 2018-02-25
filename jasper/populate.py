@@ -8,7 +8,7 @@ import feedparser
 import paths
 
 
-def run():
+def populate_profile():
     profile = {}
 
     print("Welcome to the profile populator. If, at any step, you'd prefer " +
@@ -142,6 +142,5 @@ def run():
     yaml.dump(profile, outputFile, default_flow_style=False)
     print("Done.")
 
-
 if __name__ == "__main__":
-    run()
+    populate_profile()

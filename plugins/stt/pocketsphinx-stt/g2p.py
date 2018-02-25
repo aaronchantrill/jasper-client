@@ -17,25 +17,43 @@ RE_ISYMNOTFOUND = re.compile(r'^Symbol: \'(?P<symbol>.+)\' not found in ' +
 
 def execute(executable, fst_model, input, is_file=False, nbest=None):
     logger = logging.getLogger(__name__)
-
-    cmd = [executable,
-           '--model=%s' % fst_model,
-           '--input=%s' % input,
-           '--words']
-
-    if is_file:
-        cmd.append('--isfile')
+    
+    # the newer version of phonetisaurus uses a different filename and a different method
+    if( executable=='phonetisaurus-g2pfst' ):
+        cmd = [executable,
+            '--model=%s' % fst_model,
+            '--nbest=1',
+            '--beam=1000',
+            '--thresh=99.0',
+            '--accumulate=true',
+            '--pmass=0.85',
+            '--nlog_probs=false',
+            '--wordlist=%s' % input]
+        # In this case, the output looks a little different from the old g2p output
+        # For example:
+        #     phonetisaurus-g2p:     ANSWER	12.2497	<s> AE N S ER </s>
+        #     phonetisaurus-g2pfst:  ANSWER	1	AE1 N S ER0
+        RE_WORDS = re.compile(r'(?P<word>[a-zA-Z]+)\s+(?P<precision>[\d\.]+)\s+(?P<pronounciation>[a-zA-Z]+.*[a-zA-Z0-9])\s*$',re.MULTILINE)
+    else:
+        cmd = [executable,
+            '--model=%s' % fst_model,
+            '--input=%s' % input,
+            '--words']
+        if is_file:
+            cmd.append('--isfile')
 
     if nbest is not None:
         cmd.extend(['--nbest=%d' % nbest])
 
     cmd = [str(x) for x in cmd]
+    logger.debug( "cmd: %s"%cmd )
     try:
         # FIXME: We can't just use subprocess.call and redirect stdout
         # and stderr, because it looks like Phonetisaurus can't open
         # an already opened file descriptor a second time. This is why
         # we have to use this somehow hacky subprocess.Popen approach.
         proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+        logger.debug('Polling')
         while proc.poll() is None:
             nextline = proc.stderr.readline()
             logger.debug("NextLine: '%s'"%nextline)
@@ -51,6 +69,9 @@ def execute(executable, fst_model, input, is_file=False, nbest=None):
                 #proc.kill()
                 #raise ValueError('Input symbol not found')
         stdoutdata, stderrdata = proc.communicate()
+        logger.debug("StdOutData: %s"%stdoutdata)
+        # Do some preprocessing on these results to get them into the format Jasper is expecting
+        
     except OSError:
         logger.error("Error occured while executing command '%s'",' '.join(cmd), exc_info=True)
         raise
@@ -94,7 +115,8 @@ class PhonetisaurusG2P(object):
 
     def _convert_phonemes(self, data):
         if( self.fst_model_alphabet=='xsampa' ):
-            print(data)
+            print("xsampa: ",data)
+            quit()
             for word in data:
                 converted_phonemes = []
                 for phoneme in data[word]:
@@ -103,13 +125,16 @@ class PhonetisaurusG2P(object):
                 data[word] = converted_phonemes
             return data
         elif self.fst_model_alphabet == 'arpabet':
+            print( 'arpabet: ',data )
             return data
         raise ValueError('Invalid FST model alphabet!')
 
     def _translate_word(self, word):
+        self._logger.debug("enter _translate_word")
         return execute(self.executable, self.fst_model, word,nbest=self.nbest)
 
     def _translate_words(self, words):
+        self._logger.debug("enter _translate_words")
         with tempfile.NamedTemporaryFile(suffix='.g2p', delete=False) as f:
             # The 'delete=False' kwarg is kind of a hack, but Phonetisaurus
             # won't work if we remove it, because it seems that I can't open
@@ -118,6 +143,10 @@ class PhonetisaurusG2P(object):
                 self._logger.debug(word)
                 f.write("%s\n" % word)
             tmp_fname = f.name
+        print( "Self.executable = %s"%self.executable )
+        print( "Self.fst_model = %s"%self.fst_model )
+        print( "tmp_fname = %s"%tmp_fname )
+        
         output = execute(self.executable, self.fst_model, tmp_fname,is_file=True, nbest=self.nbest)
         os.remove(tmp_fname)
         return output
@@ -132,5 +161,6 @@ class PhonetisaurusG2P(object):
             output = self._translate_words(words)
         self._logger.debug('G2P conversion returned phonemes for %d words',
                            len(output))
+        self._logger.debug(output)
 
         return self._convert_phonemes(output)
