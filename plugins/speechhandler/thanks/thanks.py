@@ -1,29 +1,31 @@
 # -*- coding: utf-8 -*-
-import os
+import random
 from jasper import plugin
 
 
-class ShutdownPlugin(plugin.SpeechHandlerPlugin):
+class ThanksPlugin(plugin.SpeechHandlerPlugin):
     def get_phrases(self):
         return [
-            self.gettext("SHUT DOWN")
+            self.gettext("THANKS"),
+            self.gettext("THANK YOU")
                 ]
 
     def handle(self, text, mic, *args):
         """
-        Responds to user-input, typically speech text, by shutting down
+        Responds to user-input, typically "thank you" with "You are welcome"
 
         Arguments:
         text -- user-input, typically transcribed speech
         mic -- used to interact with the user (for both input and output)
         """
-        mic.say('Shutting down')
-        os.system('sudo /sbin/shutdown -h now')
-        quit()
-        
+        messages = ["You're welcome","You are welcome","It's all part of the job"]
+        message = random.choice(messages)
+
+        mic.say(message)
+
     def is_valid(self, text):
         """
-        Returns True if the input is related to the meaning of life.
+        Returns True if the input is a thank you message
 
         Arguments:
         text -- user-input, typically transcribed speech

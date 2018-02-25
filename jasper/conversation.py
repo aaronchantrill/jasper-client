@@ -29,7 +29,8 @@ class Conversation(i18n.GettextMixin):
             salutation = (self.gettext("How can I be of service, %s?")
                           % self.profile["first_name"])
         else:
-            salutation = self.gettext("How can I be of service?")
+            #salutation = self.gettext("I am the genie of the Pi. Your wish is my command.")
+            salutation = self.gettext("How can I help?")
         self.mic.say(salutation)
 
     def handleForever(self):
@@ -50,16 +51,13 @@ class Conversation(i18n.GettextMixin):
                 #pdb.set_trace()
                 if plugin and text:
                     try:
+                        print( plugin )
                         plugin.handle(text,self.mic,self)
                     except Exception:
-                        self._logger.error('Failed to execute module',
-                                           exc_info=True)
-                        self.mic.say(self.gettext(
-                            "I'm sorry. I had some trouble with that " +
-                            "operation. Please try again later."))
+                        self._logger.error('Failed to execute module',exc_info=True)
+                        self.mic.say(self.gettext("I'm sorry. I had some trouble with that operation. Please try again later."))
                     else:
-                        self._logger.debug("Handling of phrase '%s' by " +
-                                           "module '%s' completed", text,
-                                           plugin.info.name)
+                        self._logger.debug("Handling of phrase '%s' by module '%s' completed", text,plugin.info.name)
             else:
-                self.mic.say(self.gettext("Pardon?"))
+                self.mic.say(self.gettext("No plugin handled that, not even unclear. Can you repeat that?"))
+                #input = self.mic.active_listen()

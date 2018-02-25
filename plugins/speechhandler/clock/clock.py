@@ -89,8 +89,8 @@ class ClockPlugin(plugin.SpeechHandlerPlugin):
         #if( self.config['language']=='en-US' ):
         if(1):
             currentHour=now.hour
-            ap="Ay-Em"
-            if( currentHour>12 ):
+            ap="Aye-Em"
+            if( currentHour>11 ):
                 currentHour=currentHour-12
                 ap="Pee-Em"
             if( currentHour==0 ):

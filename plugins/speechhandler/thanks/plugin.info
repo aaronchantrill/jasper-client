@@ -1,0 +1,10 @@
+[Plugin]
+Name = thanks
+Version = 1.0.0
+License = MIT
+URL = http://jasperproject.github.io/
+Description = Thank you, Jasper
+
+[Author]
+Name = Aaron Chantrill
+URL = https://github.com/aaronchantrill
