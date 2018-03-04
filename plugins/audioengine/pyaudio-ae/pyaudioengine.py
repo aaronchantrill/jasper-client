@@ -171,22 +171,24 @@ class PyAudioDevice(plugin.audioengine.AudioDevice):
                                "output" if output else "input", self.slug)
 
     def record(self, chunksize, *args):
-        with self.open_stream(*args, chunksize=chunksize,
-                              output=False) as stream:
-            while True:
-                try:
-                    frame = stream.read(chunksize)
-                except IOError as e:
-                    if type(e.errno) is not int:
-                        # Simple hack to work around the fact that the
-                        # errno/strerror arguments were swapped in older
-                        # PyAudio versions. This was fixed in upstream
-                        # commit 1783aaf9bcc6f8bffc478cb5120ccb6f5091b3fb.
-                        strerror, errno = e.errno, e.strerror
+        # Add a second while loop here so if the pyaudio stream gets
+        # closed, we immediately reopen it rather than just continuing
+        # to attempt to read from a closed stream
+        while True:
+            with self.open_stream(*args, chunksize=chunksize, output=False) as stream:
+                while True:
+                    try:
+                        frame = stream.read(chunksize)
+                    except IOError as e:
+                        if type(e.errno) is not int:
+                            # Simple hack to work around the fact that the
+                            # errno/strerror arguments were swapped in older
+                            # PyAudio versions. This was fixed in upstream
+                            # commit 1783aaf9bcc6f8bffc478cb5120ccb6f5091b3fb.
+                            strerror, errno = e.errno, e.strerror
+                        else:
+                            strerror, errno = e.strerror, e.errno
+                        self._logger.warning("IO error while reading from device '%s': '%s' (Errno: %d)", self.slug, strerror, errno)
+                        break
                     else:
-                        strerror, errno = e.strerror, e.errno
-                    self._logger.warning("IO error while reading from device" +
-                                         " '%s': '%s' (Errno: %d)", self.slug,
-                                         strerror, errno)
-                else:
-                    yield frame
+                        yield frame
