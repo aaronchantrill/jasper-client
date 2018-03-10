@@ -87,9 +87,7 @@ class JuliusSTTPlugin(plugin.STTPlugin):
             out_f.seek(0)
             results = [(int(i), text) for i, text in
                        RE_SENTENCE.findall(out_f.read())]
-        transcribed = [text for i, text in
-                       sorted(results, key=lambda x: x[0])
-                       if text]
+        transcribed = [text for i, text in sorted(results, key=lambda x: x[0]) if text]
         if not transcribed:
             transcribed.append('')
         self._logger.info('Transcribed: %r', transcribed)
