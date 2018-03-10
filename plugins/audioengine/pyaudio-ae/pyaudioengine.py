@@ -4,6 +4,7 @@ import contextlib
 import re
 import slugify
 import pyaudio
+from ctypes import *
 from jasper import plugin
 
 PYAUDIO_BIT_MAPPING = {8:  pyaudio.paInt8,
@@ -16,15 +17,29 @@ def bits_to_samplefmt(bits):
     if bits in PYAUDIO_BIT_MAPPING.keys():
         return PYAUDIO_BIT_MAPPING[bits]
 
-
 class PyAudioEnginePlugin(plugin.AudioEnginePlugin):
+    def py_error_handler(self, filename, line, function, err, fmt):
+        self._logger.info(err)
+
     def __init__(self, *args, **kwargs):
+        ERROR_HANDLER_FUNC = CFUNCTYPE(None, c_char_p, c_int, c_char_p, c_int, c_char_p)
+        c_error_handler = ERROR_HANDLER_FUNC(self.py_error_handler)
+
         super(PyAudioEnginePlugin, self).__init__(*args, **kwargs)
         self._logger = logging.getLogger(__name__)
         self._logger.info("Initializing PyAudio. ALSA/Jack error messages " +
                           "that pop up during this process are normal and " +
                           "can usually be safely ignored.")
+
+        asound = cdll.LoadLibrary('libasound.so')
+        # Set error handler
+        asound.snd_lib_error_set_handler(c_error_handler)
+
         self._pyaudio = pyaudio.PyAudio()
+
+        # Reset to default error handler
+        asound.snd_lib_error_set_handler(None)
+
         self._logger.info("Initialization of PyAudio engine finished")
 
     def __del__(self):

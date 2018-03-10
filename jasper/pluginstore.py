@@ -51,7 +51,8 @@ def parse_plugin_class(module_name, plugin_directory, superclasses):
     logger = logging.getLogger(__name__)
     logger.info( "mod = imp.load_module('%s',None,'%s',('py','r',%d))"%(module_name,plugin_directory,imp.PKG_DIRECTORY))
     mod = imp.load_module(module_name, None, plugin_directory,("py", "r", imp.PKG_DIRECTORY))
-
+    logger.info( "%s Imported!"%module_name )
+    
     plugin_classes = inspect.getmembers(
         mod, lambda cls: inspect.isclass(cls) and
         issubclass(cls, tuple(superclasses)))
@@ -168,7 +169,6 @@ class PluginStore(object):
                             reason = e.msg
                         if not reason:
                             reason = 'Unknown'
-                        print( 'exception e:',e )
                         self._logger.warning(
                             "Plugin at '%s' skipped! (Reason: %s)",
                             root, reason,
@@ -200,12 +200,12 @@ class PluginStore(object):
         return PluginInfo(cp, plugin_class, translations, plugin_directory)
 
     def get_plugins_by_category(self, category):
-        print( "get_plugins_by_category: ",category )
         superclass = self._categories_map[category]
-        if(category=="speechhandler"):
-            for info in self._plugins.values():
-                if issubclass(info.plugin_class,superclass):
-                    print( info._path )
+        # Why is this here?
+        #if(category=="speechhandler"):
+        #    for info in self._plugins.values():
+        #        if issubclass(info.plugin_class,superclass):
+        #            print( 'pluginstore line 207: %s'%info._path )
         return [info for info in self._plugins.values()
                 if issubclass(info.plugin_class, superclass)]
 
