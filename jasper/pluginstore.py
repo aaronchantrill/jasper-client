@@ -48,8 +48,9 @@ def parse_info_file(infofile_path):
 
 
 def parse_plugin_class(module_name, plugin_directory, superclasses):
-    mod = imp.load_module(module_name, None, plugin_directory,
-                          ("py", "r", imp.PKG_DIRECTORY))
+    logger = logging.getLogger(__name__)
+    logger.info( "mod = imp.load_module('%s',None,'%s',('py','r',%d))"%(module_name,plugin_directory,imp.PKG_DIRECTORY))
+    mod = imp.load_module(module_name, None, plugin_directory,("py", "r", imp.PKG_DIRECTORY))
 
     plugin_classes = inspect.getmembers(
         mod, lambda cls: inspect.isclass(cls) and
