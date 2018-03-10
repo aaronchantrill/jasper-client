@@ -2,7 +2,7 @@
 Name = frotz
 Version = 0.1.0
 License = MIT
-URL = http://jasperproject.github.io/
+URL = https://github.com/aaronchantrill/jasper-client
 Description = Would you like to play a game?
 
 [Author]

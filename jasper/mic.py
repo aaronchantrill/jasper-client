@@ -125,7 +125,6 @@ class Mic(object):
             with self._write_frames_to_file(frames) as f:
                 try:
                     self._transcribed = self.passive_stt_engine.transcribe(f)
-                    #print( "Transcribed: %r" % self._transcribed )
                 except:
                     dbg = (self._logger.getEffectiveLevel() == logging.DEBUG)
                     self._logger.error("Transcription failed!", exc_info=dbg)
@@ -162,8 +161,6 @@ class Mic(object):
             if keyword_uttered.is_set():
                 if self._logger.isEnabledFor(logging.DEBUG):
                     self._logger.info("Keyword %s has been uttered", keyword)
-                #else:
-                    #print(">>> %r" % self._transcribed)
                 return self._transcribed
             frames.append(frame)
             if not recording:
@@ -238,7 +235,7 @@ class Mic(object):
                                       add_padding=self._output_padding)
 
     def say(self, phrase):
-        print("<< "+phrase)
+        print("<< %s"%phrase)
         altered_phrase = alteration.clean(phrase)
         with tempfile.SpooledTemporaryFile() as f:
             f.write(self.tts_engine.say(altered_phrase))

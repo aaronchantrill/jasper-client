@@ -29,7 +29,6 @@ class Conversation(i18n.GettextMixin):
             salutation = (self.gettext("How can I be of service, %s?")
                           % self.profile["first_name"])
         else:
-            #salutation = self.gettext("I am the genie of the Pi. Your wish is my command.")
             salutation = self.gettext("How can I help?")
         self.mic.say(salutation)
 
