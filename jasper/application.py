@@ -69,12 +69,15 @@ class Jasper(object):
                 with open(new_configfile, "r") as f:
                     self.config = yaml.safe_load(f)
                     config_read=True
-            except OSError:
-                self._logger.error("Can't open config file: '%s'", new_configfile)
+            except IOError:
+                self._logger.warning("Can't open config file: '%s'", new_configfile)
                 #raise
                 input=raw_input("Your config file does not exist. Would you like to answer a few questions to create a new one? ")
                 if( re.match(r'\s*[Yy]',input) ):
                     populate.populate_profile()
+                else:
+                    print( "Cannot continue. Exiting." )
+                    quit()
             except (yaml.parser.ParserError, yaml.scanner.ScannerError) as e:
                 self._logger.error("Unable to parse config file: %s %s",
                                 e.problem.strip(), str(e.problem_mark).strip())
