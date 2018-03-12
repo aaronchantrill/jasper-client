@@ -78,13 +78,11 @@ class DeepSpeechSTTPlugin(plugin.STTPlugin):
             self._FS=16000
             
         # Save the output for inspection?
-        self._save_output=False
+        self._save_input=False
         try:
-            save_output=self.profile["deepspeech"]["save_output"]
-            if( save_output[:1].upper()=="T" ):
-                self._save_output=True
+            _save_input=self.profile["deepspeech"]["save_input"]
         except KeyError:
-            self._save_output=False
+            self._save_input=False
             
         # These are paths. They are required
         
@@ -145,7 +143,7 @@ class DeepSpeechSTTPlugin(plugin.STTPlugin):
         print('>> %r'%transcribed)
 
         # write the output to a log file
-        if( self._save_output ):
+        if( self._save_input and not transcribed==[''] ):
             self._filecount+=1
             f=open(os.path.join(os.path.dirname(os.path.realpath(__file__)),"audiolog","%d_%s.wav"%(self._filecount,text)),"w")
             f.write(fp.read())

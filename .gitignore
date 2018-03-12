@@ -77,3 +77,5 @@ plugins/speechhandler/frotz/games/*.z3
 # Ignore save games
 plugins/speechhandler/frotz/games/*.sav
 
+# Ignore audio log files created by deepspeech plugin
+plugins/stt/deepspeech-stt/audiolog/*.wav
