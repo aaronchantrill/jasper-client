@@ -1,10 +1,10 @@
 # Tutorial Setup
 
-Thank you for being interested in my workshop! This is a free workshop being presented as part of Linuxfest Northwest 2018. We have a lot to get through in the course of two hours, so I am asking everyone to arrive with a working development environment and ready to start working.
+Thank you for being interested in my workshop! This is a free workshop being presented as part of [Linuxfest Northwest 2018](https://linuxfestnorthwest.org). We have a lot to get through in the course of two hours, so I am asking everyone to arrive with a working development environment and ready to start working.
 
-Jasper is a virtual assistant that runs well on a Raspberry Pi computer. It supports a variety of speech to text and text to speech engines. In this tutorial we will be installing two offline speech to text engines (pocketsphinx and deepspeech) and one offline text to speech engine with a variety of voices (flite). This will allow your virtual assistant to function without an internet connection and without sharing your voice informat with any 3rd parties.
+Jasper is a virtual assistant that runs well on a Raspberry Pi computer. It supports a variety of speech to text and text to speech engines. In this tutorial we will be installing two offline speech to text engines (pocketsphinx and deepspeech) and one offline text to speech engine with a variety of voices (flite). This will allow your virtual assistant to function without an internet connection and without inadvertently sharing your conversations with any 3rd parties.
 
-What I need you to bring is a virtual machine running Debian Stretch from the 1st DVD (<a href="https://cdimage.debian.org/debian-cd/current/amd64/iso-dvd/debian-9.4.0-amd64-DVD-1.iso">debian-9.4.0-amd64-DVD-1.iso</a>) which you can download from https://cdimage.debian.org/debian-cd/current/amd64/iso-dvd/ (or get the 32 bit version from https://cdimage.debian.org/debian-cd/current/i386/iso-dvd/debian-9.4.0-i386-DVD-1.iso if that's how you roll). It also has to have access to speakers and a microphone to work.
+What I need you to bring is a virtual machine running Debian Stretch from the 1st DVD ([debian-9.4.0-amd64-DVD-1.iso]("https://cdimage.debian.org/debian-cd/current/amd64/iso-dvd/debian-9.4.0-amd64-DVD-1.iso")) which you can download from https://cdimage.debian.org/debian-cd/current/amd64/iso-dvd/ (or get the 32 bit version from https://cdimage.debian.org/debian-cd/current/i386/iso-dvd/debian-9.4.0-i386-DVD-1.iso if that's how you roll). It also has to have access to speakers and a microphone to work.
 
 I have prepared a video at https://www.youtube.com/watch?v=15V76DZKXPs explaining exactly what to do.
 
