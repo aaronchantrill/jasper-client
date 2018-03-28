@@ -18,7 +18,7 @@ In the process you will be asked to assign a password to the root user, and crea
 
 After installing Debian, re-mount your DVD iso (rebooting after install will usually unmount it) and log in as root
 
-Add the cdrom as a repository (I'm trying to avoid any issues with flaky wi-fi)
+Add the cdrom as a repository (I'm trying to avoid any issues with flaky wi-fi, so I'm not asking people to add an online repository)
 <pre>
 # apt-cdrom add
 </pre>
