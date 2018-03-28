@@ -16,17 +16,29 @@ Basic setup parameters include 1024 MB RAM, 10GiB hard drive, 2 processors. The 
 In the process you will be asked to assign a password to the root user, and create a regular, non-root, user and password. I am using “jasper” as my regular user, you can use whatever you want, but remember to change “jasper” to the name of your user below.
 Start by giving your regular user (jasper) sudo privileges:
 
-Log in as root
-\# apt install sudo
-\# usermod -aG sudo jasper
-\# exit
 
-Log in as your regular user
+Re-mount your DVD iso (rebooting after install will usually unmount it) and log in as root
+
+Add the cdrom as a repository (I'm trying to avoid any issues with flaky wi-fi)
+<pre>
+# apt-cdrom add
+Install sudo and add your user to the sudo group
+# apt install sudo
+# usermod -aG sudo jasper
+# exit
+</pre>
+
+Log in as your regular user and install alsa-utils
+<pre>
 $ sudo apt install alsa-utils
+</pre>
 
 record and play yourself speaking
+<pre>
 $ arecord -d 3 test.wav
 $ aplay test.wav
+</pre>
+
 If you hear your voice, then congratulations, you are set up.
 
 Please check back, I will also be posting a tar file containing files needed for the workshop (which will also be available on usb zip drive at the tutorial).
