@@ -17,9 +17,9 @@ In the process you will be asked to assign a password to the root user, and crea
 Start by giving your regular user (jasper) sudo privileges:
 
 Log in as root
-### apt install sudo #
-### usermod -aG sudo jasper #
-### exit #
+\# apt install sudo
+\# usermod -aG sudo jasper
+\# exit
 
 Log in as your regular user
 $ sudo apt install alsa-utils
