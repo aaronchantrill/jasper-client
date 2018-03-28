@@ -8,6 +8,27 @@ What I need you to bring is a virtual machine running Debian Stretch from the 1s
 
 I have prepared a video at https://www.youtube.com/watch?v=15V76DZKXPs explaining exactly what to do.
 
+Use whatever virtual machine container you are comfortable with QEMU, VirtualBox, VMWare, Hyper-V, etc. Basically, create a virtual machine with 1GiB RAM, a 10GiB hard drive, and as many processors as you can spare. Select only the SSH Server and Standard
+
+The only requirement is that you make sure the guest operating system has access to the host machine’s microphone and speakers.
+Basic setup parameters include 1024 MB RAM, 10GiB hard drive, 2 processors. The only options you need to select under “Software selection” are “standard system utilities” and “SSH Server” (which will allow you to communicate more directly with your virtual machine).
+
+In the process you will be asked to assign a password to the root user, and create a regular, non-root, user and password. I am using “jasper” as my regular user, you can use whatever you want, but remember to change “jasper” to the name of your user below.
+Start by giving your regular user (jasper) sudo privileges:
+
+Log in as root
+### apt install sudo #
+### usermod -aG sudo jasper #
+### exit #
+
+Log in as your regular user
+$ sudo apt install alsa-utils
+
+record and play yourself speaking
+$ arecord -d 3 test.wav
+$ aplay test.wav
+If you hear your voice, then congratulations, you are set up.
+
 Please check back, I will also be posting a tar file containing files needed for the workshop (which will also be available on usb zip drive at the tutorial).
 
 Thanks,
