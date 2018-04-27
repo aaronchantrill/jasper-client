@@ -18,7 +18,8 @@ iface enp0s8 inet dhcp
 ```
 ## login as vagrant (the account we created while building the box)
 ## vagrant insecure key
-```mkdir -p ~/.ssh
+```
+mkdir -p ~/.ssh
 chmod 0700 .ssh
 cd .ssh
 wget -O ./authorized_keys https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant.pub
@@ -28,13 +29,15 @@ chmod 0600 ./authorized_keys
 `sudo apt install avahi-daemon alsa-utils`
 
 ## test the microphone ("hello, can you hear me?")
-```alsamixer
+```
+alsamixer
 arecord -vv -fdat /dev/null
 arecord -r16000 -fS16_LE -c1 -d3 test.wav
 ```
 # Install PocketSphinx
 ## Install openfst:
-```sudo apt install gcc g++ make python-pip autoconf libtool
+```
+sudo apt install gcc g++ make python-pip autoconf libtool
 wget http://www.openfst.org/twiki/pub/FST/FstDownload/openfst-1.6.7.tar.gz
 tar -zxvf openfst-1.6.7.tar.gz
 cd openfst-1.6.7
@@ -46,7 +49,8 @@ cd
 ```
 
 ## Install mitlm-0.4.2:
-```sudo apt install git gfortran autoconf-archive
+```
+sudo apt install git gfortran autoconf-archive
 git clone https://github.com/mitlm/mitlm.git
 cd mitlm
 vi configure.ac add AC_CONFIG_MACRO_DIRS([m4])
@@ -58,7 +62,8 @@ sudo make install
 cd
 ```
 ## Install Phonetisaurus:
-```git clone https://github.com/AdolfVonKleist/Phonetisaurus.git
+```
+git clone https://github.com/AdolfVonKleist/Phonetisaurus.git
 cd Phonetisaurus
 ./configure --enable-python
 make
@@ -69,7 +74,8 @@ sudo python setup.py install
 cd
 ```
 ## sphinxbase-0.8:
-```sudo apt install swig libasound2-dev bison
+```
+sudo apt install swig libasound2-dev bison
 git clone https://github.com/cmusphinx/sphinxbase.git
 cd sphinxbase
 ./autogen.sh
@@ -80,7 +86,8 @@ sudo make install
 cd
 ```
 ## pocketsphinx-0.8:
-```git clone https://github.com/cmusphinx/pocketsphinx.git
+```
+git clone https://github.com/cmusphinx/pocketsphinx.git
 cd pocketsphinx
 ./autogen.sh
 ./configure
@@ -91,7 +98,8 @@ which pocketsphinx_continuous
 ```
 ## Install python PocketSphinx libary
 ###Convert to .whl 
-```wget https://pypi.python.org/packages/e1/e8/448fb4ab687ecad1be8708d152eb7ed69455be7740fc5899255be2228b52/pocketsphinx-0.1.3-py2.7-linux-x86_64.egg#md5=1b4ce66e44f53d23c981e789f84edf29`
+```
+wget https://pypi.python.org/packages/e1/e8/448fb4ab687ecad1be8708d152eb7ed69455be7740fc5899255be2228b52/pocketsphinx-0.1.3-py2.7-linux-x86_64.egg#md5=1b4ce66e44f53d23c981e789f84edf29`
 wget https://pypi.python.org/packages/0c/80/16a85b47702a1f47a63c104c91abdd0a6704ee8ae3b4ce4afc49bc39f9d9/wheel-0.30.0-py2.py3-none-any.whl#md5=1d61793f816d6b60513364fe2de9c1b3
 python ./wheel-0.30.0-py2.py3-none-any.whl/wheel convert pocketsphinx-0.1.3-py2.7-linux-x86_64.egg
 pip install ./pocketsphinx-0.1.3-cp27-none-linux_x86_64.whl
@@ -100,7 +108,8 @@ pip install ./pocketsphinx-0.1.3-cp27-none-linux_x86_64.whl
 `sudo apt install pocketsphinx-en-us`
 
 ## Install CMUCLMTK
-```sudo apt install subversion
+```
+sudo apt install subversion
 svn co https://svn.code.sf.net/p/cmusphinx/code/trunk/cmuclmtk/
 cd cmuclmtk
 ./autogen.sh
@@ -110,14 +119,16 @@ sudo ldconfig
 cd
 ```
 ## Get the CMUDict
-```mkdir CMUDict
+```
+mkdir CMUDict
 cd CMUDict
 wget https://raw.githubusercontent.com/cmusphinx/cmudict/master/cmudict.dict
 cat cmudict.dict | perl -pe 's/([0-9]+)//;s/\s+/ /g;s/^\s+//;s/\s+$//; @_=split(/\s+/); $w=shift(@_);$_=$w."\t".join(" ",@_)."\n";' > cmudict.formatted.dict
 phonetisaurus-train --lexicon cmudict.formatted.dict --seq2_del
 ```
 ## Test:
-```vi test_reference.txt
+```
+vi test_reference.txt
 <s> hello can you hear me </s>
 Create test.vocab
 text2wfreq < test_reference.txt | wfreq2vocab > test.vocab
@@ -134,7 +145,8 @@ cat test.dict | sed -rne '/^([[:lower:]])+\s/p' | perl -pe 's/([0-9])+//g;s/\s+/
 `pocketsphinx_continuous -hmm /usr/share/pocketsphinx/model/en-us/en-us -lm ./test.lm -dict ./test.formatted.dict -samprate 16000/8000/48000 -inmic yes`
 
 # DeepSpeech
-```sudo apt install g++ zlib1g-dev openjdk-8-jdk zip unzip
+```
+sudo apt install g++ zlib1g-dev openjdk-8-jdk zip unzip
 sudo pip install wheel
 wget https://github.com/bazelbuild/bazel/releases/download/0.10.0/bazel-0.10.0-without-jdk-installer-linux-x86_64.sh
 wget https://github.com/bazelbuild/bazel/releases/download/0.10.0/bazel-0.10.0-without-jdk-installer-linux-x86_64.sh.sha256
@@ -143,7 +155,8 @@ chmod a+x bazel-0.10.0-without-jdk-installer-linux-x86_64.sh
 sudo ./bazel-0.10.0-without-jdk-installer-linux-x86_64.sh
 ```
 ## Git Large File Service
-```wget https://github.com/git-lfs/git-lfs/releases/download/v2.4.0/git-lfs-linux-amd64-2.4.0.tar.gz
+```
+wget https://github.com/git-lfs/git-lfs/releases/download/v2.4.0/git-lfs-linux-amd64-2.4.0.tar.gz
 tar -xzvf git-lfs-linux-amd64-2.4.0.tar.gz
 cd git-lfs-2.4.0/
 sudo ./install.sh
@@ -169,12 +182,14 @@ tar -zxvf deepspeech-0.1.1-models.tar.gz
 `deepspeech models/output_graph.pb models/alphabet.txt models/lm.binary models/trie test.wav`
 
 # Festival:
-```sudo apt install festival
+```
+sudo apt install festival
 sudo apt install festvox-kdlpc16k
 sudo apt install festvox-kallpc16k
 ```
 ## Mbrola (non-free voices):
-```mkdir mbrola
+```
+mkdir mbrola
 cd mbrola
 sudo apt install libc6-i386
 wget http://ftp.us.debian.org/debian/pool/non-free/m/mbrola/mbrola_3.01h+2-3+b1_amd64.deb
@@ -206,14 +221,16 @@ sudo mv -iv us3 /usr/share/festival/voices/english/us3_mbrola/
 cd
 ```
 ## HTS voices
-```mkdir hts_voices
+```
+mkdir hts_voices
 cd hts_voices
 wget http://ftp.us.debian.org/debian/pool/main/f/festvox-us-slt-hts/festvox-us-slt-hts_0.2010.10.25-2_all.deb
 sudo dpkg -i festvox-us-slt-hts_0.2010.10.25-2_all.deb
 cd
 ```
 # install jasper
-```sudo apt install libasound-dev portaudio19-dev libportaudio2 libportaudiocpp0 ffmpeg libav-tools
+```
+sudo apt install libasound-dev portaudio19-dev libportaudio2 libportaudiocpp0 ffmpeg libav-tools
 sudo pip install pyyaml slugify pytz feedparser mad pyaudio requests
 
 git clone https://github.com/aaronchantrill/jasper-client.git
@@ -249,7 +266,8 @@ keyword: Jasper
 `jasper-client/Jasper.py --debug 2>&1 |& tee jasper.log`
 
 # Build frotz
-```git clone https://github.com/DavidGriffith/frotz.git
+```
+git clone https://github.com/DavidGriffith/frotz.git
 cd frotz
 make dfrotz
 cp -iv dfrotz ~/jasper-client/plugins/speechhandler/frotz/
