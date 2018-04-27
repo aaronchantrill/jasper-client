@@ -29,11 +29,11 @@ chmod 0600 ./authorized_keys
 ```alsamixer
 arecord -vv -fdat /dev/null
 arecord -r16000 -fS16_LE -c1 -d3 test.wav
-sudo apt install gcc g++ make python-pip autoconf libtool
 ```
 # Install PocketSphinx
 ## Install openfst:
-```wget http://www.openfst.org/twiki/pub/FST/FstDownload/openfst-1.6.7.tar.gz
+```sudo apt install gcc g++ make python-pip autoconf libtool
+wget http://www.openfst.org/twiki/pub/FST/FstDownload/openfst-1.6.7.tar.gz
 tar -zxvf openfst-1.6.7.tar.gz
 cd openfst-1.6.7
 autoreconf -i
