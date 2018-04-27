@@ -3,7 +3,8 @@
 ```vi /etc/apt/sources.list```
 ## remove the line that start with "deb cdrom:", save and quit
 ## apt should already be up to date since we used a network repository
-```apt update
+```
+apt update
 apt install sudo
 visudo
 adduser jasper
@@ -11,7 +12,8 @@ usermod -aG sudo jasper
 vi /etc/network/interfaces
 ```
 ## This is only for Virtualbox, to create a host-only network so we can ssh into our box. Append
-```allow-hotplug enp0s8
+```
+allow-hotplug enp0s8
 iface enp0s8 inet dhcp
 ```
 ## login as vagrant (the account we created while building the box)
