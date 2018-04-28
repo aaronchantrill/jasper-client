@@ -2,16 +2,20 @@
 ## login as root
 ```vi /etc/apt/sources.list```
 ## remove the line that start with "deb cdrom:", save and quit
-## apt should already be up to date since we used a network repository
+## apt should already be up to date since we used a network repository when installing debian
 ```
 apt update
+apt upgrade
 apt install sudo
 visudo
 adduser jasper
 usermod -aG sudo jasper
+```
+## This is only for Virtualbox, to create a host-only network so we can ssh into our box.
+```
 vi /etc/network/interfaces
 ```
-## This is only for Virtualbox, to create a host-only network so we can ssh into our box. Append
+append
 ```
 allow-hotplug enp0s8
 iface enp0s8 inet dhcp
