@@ -101,7 +101,7 @@ cd
 which pocketsphinx_continuous
 ```
 ## Install python PocketSphinx libary
-###Convert to .whl 
+### Convert to .whl 
 ```
 wget https://pypi.python.org/packages/e1/e8/448fb4ab687ecad1be8708d152eb7ed69455be7740fc5899255be2228b52/pocketsphinx-0.1.3-py2.7-linux-x86_64.egg#md5=1b4ce66e44f53d23c981e789f84edf29`
 wget https://pypi.python.org/packages/0c/80/16a85b47702a1f47a63c104c91abdd0a6704ee8ae3b4ce4afc49bc39f9d9/wheel-0.30.0-py2.py3-none-any.whl#md5=1d61793f816d6b60513364fe2de9c1b3
