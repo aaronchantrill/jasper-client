@@ -121,6 +121,7 @@ make
 sudo make install
 sudo ldconfig
 cd
+sudo pip install cmuclmtk
 ```
 ## Get the CMUDict
 ```
