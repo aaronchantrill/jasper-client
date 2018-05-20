@@ -135,13 +135,21 @@ phonetisaurus-train --lexicon cmudict.formatted.dict --seq2_del
 ```
 vi test_reference.txt
 <s> hello can you hear me </s>
+```
 ### Create test.vocab
+```
 text2wfreq < test_reference.txt | wfreq2vocab > test.vocab
+```
 ### Create test.idngram
+```
 text2idngram -vocab test.vocab -idngram test.idngram < test_reference.txt
+```
 ### Create test.lm
+```
 idngram2lm -vocab_type 0 -idngram test.idngram -vocab test.vocab -arpa test.lm
+```
 ### Create test.formatted.dict
+```
 phonetisaurus-g2pfst --model=./train/model.fst --nbest=1 --beam=1000 --thresh=99.0 --accumulate=true --pmass=0.85 --nlog_probs=false --wordlist=./test.vocab > test.dict
 cat test.dict | sed -rne '/^([[:lower:]])+\s/p' | perl -pe 's/([0-9])+//g;s/\s+/ /g;@_=split(/\s+/);$w=shift(@_);$_=$w."\t".join(" ",@_)."\n";' > test.formatted.dict
 ```
