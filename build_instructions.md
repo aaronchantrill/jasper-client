@@ -154,10 +154,10 @@ phonetisaurus-g2pfst --model=./train/model.fst --nbest=1 --beam=1000 --thresh=99
 cat test.dict | sed -rne '/^([[:lower:]])+\s/p' | perl -pe 's/([0-9])+//g;s/\s+/ /g;@_=split(/\s+/);$w=shift(@_);$_=$w."\t".join(" ",@_)."\n";' > test.formatted.dict
 ```
 ## Test with audio file:
-`pocketsphinx_continuous -infile test.wav -hmm /usr/share/pocketsphinx/model/en-us/en-us -lm ./CMUDict/test.lm -dict ./CMUDict/test.formatted.dict -samprate 16000/8000/48000 -time yes`
+`pocketsphinx_continuous -infile test.wav -hmm /usr/share/pocketsphinx/model/en-us/en-us -lm ./test.lm -dict ~/CMUDict/test.formatted.dict -samprate 16000/8000/48000 -time yes`
 
 ## Test with microphone:
-`pocketsphinx_continuous -hmm /usr/share/pocketsphinx/model/en-us/en-us -lm ./test.lm -dict ./test.formatted.dict -samprate 16000/8000/48000 -inmic yes`
+`pocketsphinx_continuous -hmm /usr/share/pocketsphinx/model/en-us/en-us -lm ./test.lm -dict ./CMUDict/test.formatted.dict -samprate 16000/8000/48000 -inmic yes`
 
 # DeepSpeech
 ```
