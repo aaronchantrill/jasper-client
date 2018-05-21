@@ -71,7 +71,13 @@ def compile_vocabulary(config, directory, phrases):
 
     logger.debug('Languagemodel path: %s' % languagemodel_path)
     logger.debug('Dictionary path:    %s' % dictionary_path)
-    text = " ".join([("<s> %s </s>" % phrase.upper()) for phrase in phrases])
+    # AJC 2018-05-20
+    # Old phonetisaurus-g2p apparently wanted words in upper case.
+    # New phonetisaurus-g2pfst seems to prefer lower case
+    if( executable=="phonetisaurus-g2pfst" ):
+        text = " ".join([("<s> %s </s>" % phrase.lower()) for phrase in phrases])
+    else:
+        text = " ".join([("<s> %s </s>" % phrase.upper()) for phrase in phrases])
     # There's some strange issue when text2idngram sometime can't find any
     # input (although it's there). For a reason beyond me, this can be fixed
     # by appending a space char to the string.
@@ -153,8 +159,14 @@ def compile_dictionary(g2pconverter, words, output_file):
     with open(output_file, "w") as f:
         for word, pronounciations in phonemes.items():
             for i, pronounciation in enumerate(pronounciations, start=1):
-                if i == 1:
-                    line = "%s\t%s\n" % (word.upper(), pronounciation)
+                if( g2pconverter.executable=="phonetisaurus-g2pfst" ):
+                    if i == 1:
+                        line = "%s\t%s\n" % (word.lower(), pronounciation)
+                    else:
+                        line = "%s(%d)\t%s\n" % (word.lower(), i, pronounciation)
                 else:
-                    line = "%s(%d)\t%s\n" % (word.upper(), i, pronounciation)
+                    if i == 1:
+                        line = "%s\t%s\n" % (word.upper(), pronounciation)
+                    else:
+                        line = "%s(%d)\t%s\n" % (word.upper(), i, pronounciation)
                 f.write(line)

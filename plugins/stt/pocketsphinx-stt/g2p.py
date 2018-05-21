@@ -22,7 +22,6 @@ def execute(executable, fst_model, input, is_file=False, nbest=None):
     if( executable=='phonetisaurus-g2pfst' ):
         cmd = [executable,
             '--model=%s' % fst_model,
-            '--nbest=1',
             '--beam=1000',
             '--thresh=99.0',
             '--accumulate=true',
@@ -140,14 +139,16 @@ class PhonetisaurusG2P(object):
             # won't work if we remove it, because it seems that I can't open
             # a file descriptor a second time.
             for word in words:
-                self._logger.debug(word)
+                self._logger.info(word)
                 f.write("%s\n" % word)
             tmp_fname = f.name
-        print( "Self.executable = %s"%self.executable )
-        print( "Self.fst_model = %s"%self.fst_model )
-        print( "tmp_fname = %s"%tmp_fname )
-        
+        self._logger.info( "Self.executable = %s"%self.executable )
+        self._logger.info( "Self.fst_model = %s"%self.fst_model )
+        self._logger.info( "tmp_fname = %s"%tmp_fname )
+        self._logger.info( "%s --model=%s --beam=1000 --thresh=99.0 --accumulate=true --pmass=0.85 --nlog_probs=false --wordlist=%s --nbest=%d"%(self.executable,self.fst_model,tmp_fname,self.nbest) )
+
         output = execute(self.executable, self.fst_model, tmp_fname,is_file=True, nbest=self.nbest)
+        
         os.remove(tmp_fname)
         return output
 
