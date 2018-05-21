@@ -157,7 +157,7 @@ cat test.dict | sed -rne '/^([[:lower:]])+\s/p' | perl -pe 's/([0-9])+//g;s/\s+/
 `pocketsphinx_continuous -hmm /usr/share/pocketsphinx/model/en-us/en-us -lm ./test.lm -dict ./test.formatted.dict -samprate 16000/8000/48000 -infile test.wav 2>/dev/null`
 
 ## Test with microphone:
-`pocketsphinx_continuous -hmm /usr/share/pocketsphinx/model/en-us/en-us -lm ./test.lm -dict ./CMUDict/test.formatted.dict -samprate 16000/8000/48000 -inmic yes 2>/dev/null`
+`pocketsphinx_continuous -hmm /usr/share/pocketsphinx/model/en-us/en-us -lm ./test.lm -dict ./test.formatted.dict -samprate 16000/8000/48000 -inmic yes 2>/dev/null`
 
 # DeepSpeech
 ```
