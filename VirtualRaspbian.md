@@ -1,4 +1,4 @@
-This file was intended to contain instructions about how to set up Raspbian on a virtual Raspberry Pi. The idea behind that was to have one disk image for my presentation that could be run on qemu or 
+This file was intended to contain instructions about how to set up Jasper on Raspbian on a virtual Raspberry Pi. The idea behind that was to have one disk image for my presentation that could be run on qemu or 
 
 After I started that process, I discovered that it is very difficult to really emulate a Raspberry Pi. It is possible to emulate a first generation machine using the arm1176 machine on qemu, but it's extremely slow and comes nowhere near emulating a Raspberry Pi 2 or 3. Also, since it requires a specially compiled kernel which lives outside the machine's file structure (which is a pain to manage, having to be replaced every time the kernel gets an update) I'm not sure how good of an emulation it really is. I have been able to compile a program on that system and then run the binary on a real Raspberry Pi, but compiling on the emulated hardware isn't really faster. Also, anything with shared libraries is again, a pain.
 
