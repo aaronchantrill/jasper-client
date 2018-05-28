@@ -1,5 +1,6 @@
 # PocketSphinx setup
-## These instructions are for installing pocketsphinx on Debian 9 (Stretch). I will also test on Raspbian Stretch and update this message when finished.
+
+These instructions are for installing pocketsphinx on Debian 9 (Stretch). I will also test on Raspbian Stretch and update this message when finished. These instructions should translate to other distros pretty easily, just changing "apt install" for your package manager.
 
 `sudo apt install alsa-utils`
 
@@ -91,9 +92,6 @@ wget https://pypi.python.org/packages/e1/e8/448fb4ab687ecad1be8708d152eb7ed69455
 python -m wheel convert pocketsphinx-0.1.3-py2.7-linux-x86_64.egg
 pip install ./pocketsphinx-0.1.3-cp27-none-linux_x86_64.whl
 ```
-## Install the general english language model files:
-`sudo apt install pocketsphinx-en-us`
-
 ## Install CMUCLMTK
 ```
 sudo apt install subversion
@@ -137,7 +135,7 @@ phonetisaurus-g2pfst --model=/home/jasper/CMUDict/train/model.fst --nbest=1 --be
 cat test.dict | sed -rne '/^([[:lower:]])+\s/p' | perl -pe 's/([0-9])+//g;s/\s+/ /g;@_=split(/\s+/);$w=shift(@_);$_=$w."\t".join(" ",@_)."\n";' > test.formatted.dict
 ```
 ## Test with audio file:
-`pocketsphinx_continuous -hmm /usr/share/pocketsphinx/model/en-us/en-us -lm ./test.lm -dict ./test.formatted.dict -samprate 16000/8000/48000 -infile test.wav 2>/dev/null`
+`pocketsphinx_continuous -hmm ~/pocketsphinx/model/en-us/en-us -lm ./test.lm -dict ./test.formatted.dict -samprate 16000/8000/48000 -infile test.wav 2>/dev/null`
 
 ## Test with microphone:
-`pocketsphinx_continuous -hmm /usr/share/pocketsphinx/model/en-us/en-us -lm ./test.lm -dict ./test.formatted.dict -samprate 16000/8000/48000 -inmic yes 2>/dev/null`
+`pocketsphinx_continuous -hmm ~/pocketsphinx/model/en-us/en-us -lm ./test.lm -dict ./test.formatted.dict -samprate 16000/8000/48000 -inmic yes 2>/dev/null`
