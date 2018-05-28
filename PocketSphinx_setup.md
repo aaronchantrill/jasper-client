@@ -5,7 +5,7 @@
 
 ## test the microphone ("hello, can you hear me?")
 
-You want to make sure that the level indicator at the bottom of the screen goes up to about 60% when you are speaking.
+You want to make sure that the level indicator at the bottom of the screen goes up to about 60% when you are speaking. Use alsamixer to adjust your recording and playback levels.
 
 Also, play it back and make sure the audio does not contain any hissing or popping.
 
