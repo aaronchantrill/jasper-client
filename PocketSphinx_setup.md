@@ -2,8 +2,6 @@
 
 These instructions are for installing pocketsphinx on Debian 9 (Stretch). I will also test on Raspbian Stretch and update this message when finished. These instructions should translate to other distros pretty easily, just changing "apt install" for your package manager.
 
-`sudo apt install alsa-utils`
-
 ## test the microphone ("hello, can you hear me?")
 
 You want to make sure that the level indicator at the bottom of the screen goes up to about 60% when you are speaking. Use alsamixer to adjust your recording and playback levels.
@@ -12,6 +10,7 @@ Also, play it back and make sure the audio does not contain any hissing or poppi
 
 We will train PocketSphinx to transcribe this audio later in these instructions.
 ```
+sudo apt install alsa-utils
 alsamixer
 arecord -vv -r16000 -fS16_LE -c1 -d3 test.wav
 aplay test.wav
