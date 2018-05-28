@@ -13,7 +13,7 @@ We will train PocketSphinx to transcribe this audio later in these instructions.
 ```
 alsamixer
 arecord -vv -r16000 -fS16_LE -c1 -d3 test.wav
-aplay 
+aplay test.wav
 ```
 # Install PocketSphinx
 ## Install openfst:
