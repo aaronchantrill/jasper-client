@@ -57,11 +57,11 @@ cd
 ```
 ## sphinxbase-0.8:
 
-Make sure that alsa was picked up in the configuration by saving the output from configure to a log file, then search for "alsa". You should get a result like:
+Here we download the latest sphinxbase from github, configure it, and make sure that alsa was picked up in the configuration by saving the output from configure to a log file, then search for "alsa". You should get a result like:
 * checking alsa/asoundlib.h usability... yes
 * checking alsa/asoundlib.h presence... yes
 * checking for alsa/asoundlib.h... yes
-
+Then we build and install the result.
 ```
 sudo apt install swig libasound2-dev bison
 git clone https://github.com/cmusphinx/sphinxbase.git
