@@ -4,9 +4,13 @@
 `sudo apt install alsa-utils`
 
 ## test the microphone ("hello, can you hear me?")
+## You want to make sure that the level indicator at the bottom of the screen goes up to about 60% when you are speaking.
+## Also, play it back and make sure the audio does not contain any hissing or popping.
+## We will train PocketSphinx to transcribe this audio later in these instructions.
 ```
 alsamixer
 arecord -vv -r16000 -fS16_LE -c1 -d3 test.wav
+aplay 
 ```
 # Install PocketSphinx
 ## Install openfst:
