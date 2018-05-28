@@ -55,12 +55,18 @@ sudo python setup.py install
 cd
 ```
 ## sphinxbase-0.8:
+
+Make sure that alsa was picked up in the configuration by saving the output from configure to a log file, then search for "alsa". You should get a result like:
+* checking alsa/asoundlib.h usability... yes
+* checking alsa/asoundlib.h presence... yes
+* checking for alsa/asoundlib.h... yes
+
 ```
 sudo apt install swig libasound2-dev bison
 git clone https://github.com/cmusphinx/sphinxbase.git
 cd sphinxbase
 ./autogen.sh
-./configure 2>&1 |& tee configure.log
+./configure |& tee configure.log
 grep -i 'alsa' configure.log
 make
 sudo make install
@@ -80,9 +86,9 @@ which pocketsphinx_continuous
 ## Install python PocketSphinx libary
 ### Convert to .whl 
 ```
+sudo pip install wheel
 wget https://pypi.python.org/packages/e1/e8/448fb4ab687ecad1be8708d152eb7ed69455be7740fc5899255be2228b52/pocketsphinx-0.1.3-py2.7-linux-x86_64.egg#md5=1b4ce66e44f53d23c981e789f84edf29`
-wget https://pypi.python.org/packages/0c/80/16a85b47702a1f47a63c104c91abdd0a6704ee8ae3b4ce4afc49bc39f9d9/wheel-0.30.0-py2.py3-none-any.whl#md5=1d61793f816d6b60513364fe2de9c1b3
-python ./wheel-0.30.0-py2.py3-none-any.whl/wheel convert pocketsphinx-0.1.3-py2.7-linux-x86_64.egg
+python -m wheel convert pocketsphinx-0.1.3-py2.7-linux-x86_64.egg
 pip install ./pocketsphinx-0.1.3-cp27-none-linux_x86_64.whl
 ```
 ## Install the general english language model files:
