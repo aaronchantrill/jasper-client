@@ -35,8 +35,7 @@ chmod 0600 ./authorized_keys
 ## test the microphone ("hello, can you hear me?")
 ```
 alsamixer
-arecord -vv -fdat /dev/null
-arecord -r16000 -fS16_LE -c1 -d3 test.wav
+arecord -vv -r16000 -fS16_LE -c1 -d3 test.wav
 ```
 # Install PocketSphinx
 ## Install openfst:
