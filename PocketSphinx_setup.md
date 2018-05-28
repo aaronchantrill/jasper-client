@@ -16,7 +16,7 @@ arecord -vv -r16000 -fS16_LE -c1 -d3 test.wav
 aplay test.wav
 ```
 # Install PocketSphinx
-## Install openfst:
+## Build and install openfst:
 ```
 sudo apt install gcc g++ make python-pip autoconf libtool
 wget http://www.openfst.org/twiki/pub/FST/FstDownload/openfst-1.6.7.tar.gz
@@ -29,7 +29,7 @@ sudo make install
 cd
 ```
 
-## Install mitlm-0.4.2:
+## Build and install mitlm-0.4.2:
 ```
 sudo apt install git gfortran autoconf-archive
 git clone https://github.com/mitlm/mitlm.git
@@ -42,7 +42,7 @@ make
 sudo make install
 cd
 ```
-## Install Phonetisaurus:
+## Build and install Phonetisaurus:
 ```
 git clone https://github.com/AdolfVonKleist/Phonetisaurus.git
 cd Phonetisaurus
@@ -54,7 +54,7 @@ cp -iv ../.libs/Phonetisaurus.so ./
 sudo python setup.py install
 cd
 ```
-## sphinxbase-0.8:
+## Build and install sphinxbase-0.8:
 
 Here we download the latest sphinxbase from github, configure it, and make sure that alsa was picked up in the configuration by saving the output from configure to a log file, then search for "alsa". You should get a result like:
 * checking alsa/asoundlib.h usability... yes
@@ -72,7 +72,7 @@ make
 sudo make install
 cd
 ```
-## pocketsphinx-0.8:
+## Build and install pocketsphinx-0.8:
 ```
 git clone https://github.com/cmusphinx/pocketsphinx.git
 cd pocketsphinx
@@ -84,14 +84,14 @@ cd
 which pocketsphinx_continuous
 ```
 ## Install python PocketSphinx libary
-### Convert to .whl 
+Download the old .egg file, convert it to wheel, and install it with pip.
 ```
 sudo pip install wheel
 wget https://pypi.python.org/packages/e1/e8/448fb4ab687ecad1be8708d152eb7ed69455be7740fc5899255be2228b52/pocketsphinx-0.1.3-py2.7-linux-x86_64.egg#md5=1b4ce66e44f53d23c981e789f84edf29`
 python -m wheel convert pocketsphinx-0.1.3-py2.7-linux-x86_64.egg
 pip install ./pocketsphinx-0.1.3-cp27-none-linux_x86_64.whl
 ```
-## Install CMUCLMTK
+## Build and install CMUCLMTK
 ```
 sudo apt install subversion
 svn co https://svn.code.sf.net/p/cmusphinx/code/trunk/cmuclmtk/
