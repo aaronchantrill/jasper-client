@@ -1,7 +1,7 @@
 # PocketSphinx setup
 ## These instructions are for installing pocketsphinx on Debian 9 (Stretch). I will also test on Raspbian Stretch and update this message when finished.
 
-`sudo apt install avahi-daemon alsa-utils`
+`sudo apt install alsa-utils`
 
 ## test the microphone ("hello, can you hear me?")
 ```
