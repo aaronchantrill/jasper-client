@@ -31,15 +31,12 @@ class Jasper(object):
             try:
                 os.makedirs(paths.CONFIG_PATH)
             except OSError:
-                self._logger.error("Could not create config dir: '%s'",
-                                   paths.CONFIG_PATH, exc_info=True)
+                self._logger.error("Could not create config dir: '%s'",paths.CONFIG_PATH, exc_info=True)
                 raise
 
         # Check if config dir is writable
         if not os.access(paths.CONFIG_PATH, os.W_OK):
-            self._logger.critical("Config dir %s is not writable. Jasper " +
-                                  "won't work correctly.",
-                                  paths.CONFIG_PATH)
+            self._logger.critical("Config dir %s is not writable. Jasper won't work correctly.",paths.CONFIG_PATH)
 
         # FIXME: For backwards compatibility, move old config file to newly
         #        created config dir
@@ -47,18 +44,13 @@ class Jasper(object):
         new_configfile = paths.config('profile.yml')
         if os.path.exists(old_configfile):
             if os.path.exists(new_configfile):
-                self._logger.warning("Deprecated profile file found: '%s'. " +
-                                     "Please remove it.", old_configfile)
+                self._logger.warning("Deprecated profile file found: '%s'. Please remove it.", old_configfile)
             else:
-                self._logger.warning("Deprecated profile file found: '%s'. " +
-                                     "Trying to copy it to new location '%s'.",
-                                     old_configfile, new_configfile)
+                self._logger.warning("Deprecated profile file found: '%s'. Trying to copy it to new location '%s'.",old_configfile, new_configfile)
                 try:
                     shutil.copy2(old_configfile, new_configfile)
                 except shutil.Error:
-                    self._logger.error("Unable to copy config file. " +
-                                       "Please copy it manually.",
-                                       exc_info=True)
+                    self._logger.error("Unable to copy config file. Please copy it manually.",exc_info=True)
                     raise
 
         # Read config
@@ -86,8 +78,7 @@ class Jasper(object):
         try:
             language = self.config['language']
         except KeyError:
-            self._logger.warning(
-                "language not specified in profile, using 'en-US'")
+            self._logger.warning("language not specified in profile, using 'en-US'")
         else:
             self._logger.info("Using language '%s'", language)
 
@@ -95,8 +86,7 @@ class Jasper(object):
             audio_engine_slug = self.config['audio_engine']
         except KeyError:
             audio_engine_slug = 'pyaudio'
-            self._logger.info("audio_engine not specified in profile, using " +
-                              "defaults.")
+            self._logger.info("audio_engine not specified in profile, using defaults.")
         self._logger.debug("Using Audio engine '%s'", audio_engine_slug)
 
         try:
@@ -112,7 +102,7 @@ class Jasper(object):
         except KeyError:
             passive_stt_slug = active_stt_slug
         self._logger.debug("Using passive STT engine '%s'", passive_stt_slug)
-
+        
         try:
             tts_slug = self.config['tts_engine']
         except KeyError:
@@ -137,8 +127,7 @@ class Jasper(object):
         self.plugins.detect_plugins()
 
         # Initialize AudioEngine
-        ae_info = self.plugins.get_plugin(audio_engine_slug,
-                                          category='audioengine')
+        ae_info = self.plugins.get_plugin(audio_engine_slug,category='audioengine')
         self.audio = ae_info.plugin_class(ae_info, self.config)
 
         # Initialize audio input device
@@ -216,7 +205,9 @@ class Jasper(object):
         else:
             passive_stt_plugin_info = active_stt_plugin_info
 
-        passive_stt_plugin = passive_stt_plugin_info.plugin_class('keyword', self.brain.get_all_phrases() + [keyword],passive_stt_plugin_info, self.config)
+        # for passive stt I don't want all phrases, I want pretty much just the wake word
+        #passive_stt_plugin = passive_stt_plugin_info.plugin_class('keyword', self.brain.get_all_phrases() + [keyword],passive_stt_plugin_info, self.config)
+        passive_stt_plugin = passive_stt_plugin_info.plugin_class('keyword', self.brain.get_standard_phrases() + [keyword],passive_stt_plugin_info, self.config)
 
         tts_plugin_info = self.plugins.get_plugin(tts_slug, category='tts')
         tts_plugin = tts_plugin_info.plugin_class(tts_plugin_info, self.config)

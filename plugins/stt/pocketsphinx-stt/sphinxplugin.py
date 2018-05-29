@@ -123,6 +123,8 @@ class PocketsphinxSTTPlugin(plugin.STTPlugin):
         # FIXME: Can't use the Decoder.decode_raw() here, because
         # pocketsphinx segfaults with tempfile.SpooledTemporaryFile()
         data = fp.read()
+        fp.seek(0)
+        
         self._decoder.start_utt()
         self._decoder.process_raw(data, False, True)
         self._decoder.end_utt()

@@ -29,7 +29,7 @@ class Conversation(i18n.GettextMixin):
             salutation = (self.gettext("How can I be of service, %s?")
                           % self.profile["first_name"])
         else:
-            salutation = self.gettext("How can I help?")
+            salutation = self.gettext("Hello, I am listening")
         self.mic.say(salutation)
 
     def handleForever(self):
@@ -43,20 +43,24 @@ class Conversation(i18n.GettextMixin):
             for notif in notifications:
                 self._logger.info("Received notification: '%s'", str(notif))"""
 
+            self._logger.debug('Conversation Listening')
             input = self.mic.listen()
+            self._logger.debug('Conversation Done Listening')
 
+            self._logger.debug("Input: %s"%(True if input else False))
+            
             if input:
                 plugin, text = self.brain.query(input)
                 #pdb.set_trace()
                 if plugin and text:
                     try:
-                        print( plugin )
                         plugin.handle(text,self.mic,self)
                     except Exception:
                         self._logger.error('Failed to execute module',exc_info=True)
                         self.mic.say(self.gettext("I'm sorry. I had some trouble with that operation. Please try again later."))
                     else:
                         self._logger.debug("Handling of phrase '%s' by module '%s' completed", text,plugin.info.name)
-            else:
-                self.mic.say(self.gettext("No plugin handled that, not even unclear. Can you repeat that?"))
-                #input = self.mic.active_listen()
+                else:
+                    self._logger.debug('Conversation Unhandled')
+                    self.mic.say(self.gettext("No plugin handled that, not even unclear. Can you repeat that?"))
+                    #input = self.mic.active_listen()
