@@ -308,7 +308,7 @@ class Mic(object):
             frames.append(frame)
             if( len(frames)>4 ):
                 volume=self._snr(frames[-n:])
-                self._logger.info( "volume=%d"%volume) )            
+                self._logger.info( "volume=%d"%volume)          
                 if( volume>volume_threshold and not recording ):
                     recording=True
                     if( len(frames)>n ):
