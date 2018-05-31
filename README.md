@@ -1,36 +1,46 @@
 jasper-client
 =============
 
-[![Build Status](https://travis-ci.org/jasperproject/jasper-client.svg?branch=master)](https://travis-ci.org/jasperproject/jasper-client) [![Coverage Status](https://img.shields.io/coveralls/jasperproject/jasper-client.svg)](https://coveralls.io/r/jasperproject/jasper-client) [![Codacy Badge](https://www.codacy.com/project/badge/3a50e1bc2261419894d76b7e2c1ac694)](https://www.codacy.com/app/jasperproject/jasper-client)
+Client code for the Jasper voice computing platform. Jasper is an open source platform for developing always-on, voice-controlled applications. What makes Jasper different from other voice activated assistants is that Jasper can pretty much run on your local hardware, without sending recordings of your voice off to the cloud for transcribing. Not only does this circumvent many privacy issues, but right now it means that it can do things the corporate systems can't. It is trivial, for example, to change Jasper's wake word to any name you want, or even a variety of names and nicknames.
 
-Client code for the Jasper voice computing platform. Jasper is an open source platform for developing always-on, voice-controlled applications.
+The original development team for Jasper (who I have never met or worked with) did a great job of writing Jasper to be general purpose. It is easy to customize and write new libraries for speech to text recognition, text to speech, different audio subsystems, etc. This was the first thing that attracted me to this project, as my original goal was just to experiment with and understand better how to use different speech to text systems.
 
-Learn more at [jasperproject.github.io](http://jasperproject.github.io/), where we have assembly and installation instructions, as well as extensive documentation. For the relevant disk image, please visit [SourceForge](http://sourceforge.net/projects/jasperproject/).
+My goal is to facilitate training these tools to your individual speaking voice and accent, and languages other than english. Please be aware that if you enable recording of active listening, passive listening and/or noise, the computer will be creating audio files on your hard drive and maintaining a database of these samples with transcriptions. These audio recordings are not uploaded to the cloud or intended to be used by anyone but you, but you may want to limit the recording to times when everyone knows they are being recorded.
+
+I also intend to add the ability to train this system to recognize individual voices and respond uniquely to each user (allowing users to maintain own shopping lists, music collections, etc). I am also working on making interactions with Jasper more conversational.
+
+Step by step instructions for setting up and testing Pocketsphinx are listed in [PocketSphinx_setup.md](https://github.com/aaronchantrill/jasper-client/blob/master/PocketSphinx_setup.md). This version of Jasper has been tested with both the old 1.3.4 and the new 1.6.7 versions of OpenFST, and I imagine it would work with anything in between. I'll be trying to stay up to date with the latest versions of Phonetisaurus.
+
+Step by step instructions for setting up this version of Jasper can found in [build_instructions.md](https://github.com/aaronchantrill/jasper-client/blob/master/build_instructions.md). These instructions cover setting up Jasper to use PocketSphinx for passive listening (because it is fast and only accurate when using a small dictionary) and DeepSpeech for active listening (because it is slow and still has accuracy issues, but a huge dictionary), festival for text to speech processing, and pyaudio for the audio subsystem. This is the setup I am currently using.
 
 ## Contributing
 
-If you'd like to contribute to Jasper, please read through our **[Contributing Guide](CONTRIBUTING.md)**, which outlines the philosophies to preserve, tests to run, and more. We highly recommend reading through this guide before writing any code.
+If you want to help, then that is fantastic. One of the great aspects of a project like this is that it incorporates a lot of different disciplines. Here's a list of projects I'd love help with:
 
-The Contributing Guide also outlines some prospective features and areas that could use love. However, for a more thorough overview of Jasper's direction and goals, check out the **[Product Roadmap](https://github.com/jasperproject/jasper-client/wiki/Roadmap)**.
+1. Voice training database - I am currently working on creating a website which will allow me to listen to recordings and manually select the identity of the speaker and verify or correct the transcription. This is part one of my plan to improve usability by allowing users to train Jasper to particular voices and different languages and accents.
+2. Better voice - Jasper can use several different text to speech libraries to talk. Personally, I tend to use Festival with Arctic voices because they are the right combination of ease of use and quality. If I could use higher quality voices, I would. Also, festival allows you to specify the speed, inflection, etc. of voices, which can be used to make Jasper sing, and could be incorporated into Jasper's personality. Personally, I would love to give Jasper Terry Gross's voice.
+3. Visual feedback - It often takes time for Jasper to respond. During this time, it can be hard to tell if Jasper has heard you or not. Other projects have used light patterns or animated faces to let you know if the computer is waiting for a wake word, is preparing to respond, or has crashed.
 
-Thanks in advance for any and all work you contribute to Jasper!
+If you'd like to contribute to Jasper, please read through the **[Contributing Guide](CONTRIBUTING.md)**, which outlines the philosophies to preserve, tests to run, and more. We highly recommend reading through this guide before writing any code.
+
+Thank you!
 
 ## Support
 
-If you run into an issue or require technical support, please first look through the closed and open **[GitHub Issues](https://github.com/jasperproject/jasper-client/issues)**, as you may find a solution there (or some useful advice, at least).
-
-If you're still having trouble, the next place to look would be the new **[Google Group support forum](https://groups.google.com/forum/#!forum/jasper-support-forum)** or join the `#jasper` IRC channel on **chat.freenode.net**. If your problem remains unsolved, feel free to create a post there describing the issue, the steps you've taken to debug it, etc.
+If you run into an issue or require technical support, please first look through the closed and open **[GitHub Issues](https://github.com/aaronchantrill/jasper-client/issues)**, as you may find a solution there (or some useful advice, at least).
 
 ## Contact
 
-Jasper's core developers are [Shubhro Saha](http://www.shubhro.com), [Charles Marsh](http://www.crmarsh.com) and [Jan Holthuis](http://homepage.ruhr-uni-bochum.de/Jan.Holthuis/).  All of them can be reached by email at [saha@princeton.edu](mailto:saha@princeton.edu), [crmarsh@princeton.edu](mailto:crmarsh@princeton.edu) and [jan.holthuis@ruhr-uni-bochum.de](mailto:jan.holthuis@ruhr-uni-bochum.de) respectively. However, for technical support and other problems, please go through the channels mentioned above.
+Jasper's original core developers are [Shubhro Saha](http://www.shubhro.com), [Charles Marsh](http://www.crmarsh.com) and [Jan Holthuis](http://homepage.ruhr-uni-bochum.de/Jan.Holthuis/).  All of them can be reached by email at [saha@princeton.edu](mailto:saha@princeton.edu), [crmarsh@princeton.edu](mailto:crmarsh@princeton.edu) and [jan.holthuis@ruhr-uni-bochum.de](mailto:jan.holthuis@ruhr-uni-bochum.de) respectively. Their version of Jasper can be found at [https://github.com/jasperproject/jasper-client](https://github.com/jasperproject/jasper-client).
 
-For a complete list of code contributors, please see [AUTHORS.md](AUTHORS.md).
+This version of Jasper is maintained by Aaron Chantrill who can be contacted at [aaron.chantrill@dottywood.org](mailto:aaron.chantrill@dottywood.org). I began this from commit 1b102b1a9ce806c99f01fccea3aaf675b136031b of the Jasper-dev branch. I do not know and have not worked with any of the original core developers, but greatly appreciate all the effort they obviously put into this system.
+
+For a semi-complete list of code contributors, please see [AUTHORS.md](AUTHORS.md).
 
 ## License
 
-*Copyright (c) 2014-2015, Charles Marsh, Shubhro Saha & Jan Holthuis. All rights reserved.*
+*Original Copyright (c) 2014-2015, Charles Marsh, Shubhro Saha & Jan Holthuis. All rights reserved.*
+
+*Modifications Copyright (c) 2017-2018, Aaron Chantrill*
 
 Jasper is covered by the MIT license, a permissive free software license that lets you do anything you want with the source code, as long as you provide back attribution and ["don't hold \[us\] liable"](http://choosealicense.com). For the full license text see the [LICENSE.md](LICENSE.md) file.
-
-*Note that this licensing only refers to the Jasper client code (i.e.,  the code on GitHub) and not to the disk image itself (i.e., the code on SourceForge).*
