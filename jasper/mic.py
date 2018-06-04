@@ -158,7 +158,7 @@ class Mic(object):
             c=self._conn.cursor()
             c.execute('''create table if not exists audiolog(datetime,filename,type,transcription,verified_transcription,speaker,reviewed)''')
             self._conn.commit()
-            c.execute( '''insert into audiolog values(?,?,?,?,'','','')''',(datetime.now().strftime('%Y-%m-%d %H-%i-%s'),filename,sample_type,transcription) )
+            c.execute( '''insert into audiolog values(date('now'),?,?,?,'','','')''',(filename,sample_type,str(transcription)) )
             self._conn.commit()
         
     @contextlib.contextmanager
