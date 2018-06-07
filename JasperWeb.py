@@ -84,7 +84,6 @@ def application(environ,start_response):
     // Submit an updated transcription to the server. Upon success, make the "revert" button inactive
     function UpdateTranscription(RowID){
         var Transcription=document.getElementById("transcription_"+RowID).value;
-        alert( "Transcription="+Transcription );
         var xhttp=new XMLHttpRequest();
         xhttp.onreadystatechange=function(){
             if( this.readyState==4 && this.status==200 ){
@@ -93,6 +92,7 @@ def application(environ,start_response):
                 if( message=="SUCCESS;Updated "+RowID ){
                     // disable reset button
                     document.getElementById("reset_"+RowID).disabled=true;
+                    document.getElementById("r"+RowID).parentNode.removeChild(document.getElementById("r"+RowID));
                 }else{
                     //alert( "message="+message );
                 }
@@ -128,7 +128,7 @@ def application(environ,start_response):
                 
                 conn=sqlite3.connect(audiolog_db)
                 c=conn.cursor()
-                c.execute("select rowid,datetime,filename,type,transcription,verified_transcription,speaker,reviewed from audiolog")
+                c.execute("select rowid,datetime,filename,type,transcription,verified_transcription,speaker,reviewed from audiolog where reviewed=''")
                 rows=c.fetchall()
                 ret.append("""<table id="audioclips" border=1 width="100%">\n""")
                 for row in rows:

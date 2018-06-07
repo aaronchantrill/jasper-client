@@ -156,9 +156,9 @@ class Mic(object):
             f.close()
             # Also add a line to the sqlite database
             c=self._conn.cursor()
-            c.execute('''create table if not exists audiolog(datetime,filename,type,transcription,verified_transcription,speaker,reviewed)''')
+            c.execute('''create table if not exists audiolog(datetime,filename,type,transcription,verified_transcription,speaker,reviewed,wer)''')
             self._conn.commit()
-            c.execute( '''insert into audiolog values(date('now'),?,?,?,'','','')''',(filename,sample_type,str(transcription)) )
+            c.execute('''insert into audiolog values(?,?,?,?,'','','')''',(datetime.now().strftime("%Y-%m-%d %H:%M:%S"),filename,sample_type,transcription) )
             self._conn.commit()
         
     @contextlib.contextmanager
@@ -341,10 +341,10 @@ class Mic(object):
                         self.play_file(paths.data('audio', 'beep_lo.wav'))
                         presponse=self.active_stt_engine.transcribe(f)
                         if( len(presponse) ):
-                            self._log_audio(f,str(presponse),"active")
+                            self._log_audio(f,presponse[0],"active")
                     else:
                         if( len(presponse) ):
-                            self._log_audio(f,str(presponse),"passive")
+                            self._log_audio(f,presponse[0],"passive")
                             # clear presponse so we don't trigger anything in conversation
                             presponse=[]
             else:
