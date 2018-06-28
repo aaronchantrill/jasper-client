@@ -349,10 +349,9 @@ class Mic(object):
                             presponse=[]
             else:
                 # if we are not waiting for a wake word, go ahead and use the active engine.
-                # it would be good to have some way of 
                 presponse=self.active_stt_engine.transcribe(f)
                 if( len(presponse) ):
-                    self._log_audio(f,str(presponse),"active")
+                    self._log_audio(f,str(presponse[0]),"active")
         #if( self._save_input and not transcribed==[''] ):
         #    self._filecount+=1
         #    f=open(os.path.join(self._audiolog,"%d_%s.wav"%(self._filecount,text)),"w")
