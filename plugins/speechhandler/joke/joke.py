@@ -53,7 +53,6 @@ class JokePlugin(plugin.SpeechHandlerPlugin):
         text -- user-input, typically transcribed speech
         mic -- used to interact with the user (for both input and output)
         """
-        mic = conversation.mic
         joke = random.choice(self._jokes)
 
         mic.say(self.gettext("Knock knock"))
