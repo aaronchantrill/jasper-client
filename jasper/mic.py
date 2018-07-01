@@ -58,6 +58,17 @@ class Mic(object):
         self._input_chunksize = get_config_value(config, 'input_chunksize',1024)
         self._output_chunksize = get_config_value(config, 'output_chunksize',1024)
         
+        # The volume threshold was originally set to 3, which would be very loud in my case, and the volume would never rise above that.
+        # Need to use some logic to establish the noise level outside of voices, since this tends to change from computer to computer
+        # and even just plugging in a different microphone to the same computer.
+        # Male voices tend to be in the range of 80-180 and female from 165 to 255 or so. We want to capture some audio and check if
+        # the audio in this range is significantly more energetic than in other ranges. If so, then someone is probably speaking while
+        # we get the background threshold.
+        # This automatically adjusts downward. If you have this set too high, then the audio level will never reach this level and
+        # Jasper will stop listening after 2*n=~1 second. At that point, it will set the threshold level to whatever level it detected.
+        # if the threshold is set too low, though, it will just keep recording forever.
+        # Ideally, it would also adjust up if after recording it didn't detect any voices.
+        self.volume_threshold=0
         # Save active input for inspection?
         # (active input is after the 'wake word' has been detected, so it is more likely that the speaker knows they are addressing Jasper)
         self._save_active_input=False
@@ -114,14 +125,15 @@ class Mic(object):
         else:
             self._output_padding = False
 
-        self._logger.debug('Input sample rate: %d Hz', self._input_rate)
-        self._logger.debug('Input sample width: %d bit', self._input_bits)
-        self._logger.debug('Input channels: %d', self._input_channels)
-        self._logger.debug('Input chunksize: %d frames', self._input_chunksize)
-        self._logger.debug('Output chunksize: %d frames', self._output_chunksize)
-        self._logger.debug('Output padding: %s', 'yes' if self._output_padding else 'no')
+        self._logger.info('Input sample rate: %d Hz', self._input_rate)
+        self._logger.info('Input sample width: %d bit', self._input_bits)
+        self._logger.info('Input channels: %d', self._input_channels)
+        self._logger.info('Input chunksize: %d frames', self._input_chunksize)
+        self._logger.info('Output chunksize: %d frames', self._output_chunksize)
+        self._logger.info('Output padding: %s', 'yes' if self._output_padding else 'no')
 
         self._threshold = 2.0**self._input_bits
+        self._logger.info("Threshold set to %d"%self._threshold)
         self._transcribed = ""
 
     @contextlib.contextmanager
@@ -158,7 +170,7 @@ class Mic(object):
             c=self._conn.cursor()
             c.execute('''create table if not exists audiolog(datetime,filename,type,transcription,verified_transcription,speaker,reviewed,wer)''')
             self._conn.commit()
-            c.execute('''insert into audiolog values(?,?,?,?,'','','')''',(datetime.now().strftime("%Y-%m-%d %H:%M:%S"),filename,sample_type,transcription) )
+            c.execute('''insert into audiolog values(?,?,?,?,'','','','')''',(datetime.now().strftime("%Y-%m-%d %H:%M:%S"),filename,sample_type,transcription) )
             self._conn.commit()
         
     @contextlib.contextmanager
@@ -229,18 +241,18 @@ class Mic(object):
             frames.append(frame)
             if not recording:
                 snr = self._snr([frame])
-                if snr >= 10:  # 10dB
+                if snr >= self.volume_threshold:  # 10dB
                     # Loudness is higher than normal, start recording and use
                     # the last 10 frames to start
-                    self._logger.debug("Started recording on device '%s'",
-                                       self._input_device.slug)
-                    self._logger.debug("Triggered on SNR of %sdB", snr)
+                    self._logger.debug("Started recording on device '%s'"%self._input_device.slug)
+                    self._logger.debug("Triggered on SNR of %sdB"%snr)
                     recording = True
                     recording_frames = list(frames)[-10:]
                 elif len(frames) >= frames.maxlen:
                     # Threshold SNR not reached. Update threshold with
                     # background noise.
-                    self._threshold = float(audioop.rms("".join(frames), 2))
+                    self._logger.info("Changing threshold from %d to %d"%(self.volume_threshold,snr))
+                    self.volume_threshold=snr
             else:
                 # We're recording
                 recording_frames.append(frame)
@@ -248,18 +260,19 @@ class Mic(object):
                     # If we recorded at least 20 frames, check if we're below
                     # threshold again
                     last_snr = self._snr(recording_frames[-10:])
-                    self._logger.debug(
-                        "Recording's SNR dB: %f", last_snr)
-                    if last_snr <= 3 or len(recording_frames) >= 60:
+                    self._logger.debug("Recording's SNR dB: %f"%last_snr)
+                    if last_snr <= self.volume_threshold or len(recording_frames) >= 60:
                         # The loudness of the sound is not at least as high as
                         # the the threshold, or we've been waiting too long
                         # we'll stop recording now
                         recording = False
-                        self._logger.debug("Recorded %d frames",
-                                           len(recording_frames))
+                        self._logger.debug("Recorded %d frames"%len(recording_frames))
                         frame_queue.put(tuple(recording_frames))
-                        self._threshold = float(
-                            audioop.rms(b"".join(frames), 2))
+                        new_threshold=float(audioop.rms(b"",join(frames),2))
+                        self._logger.info("Changing threshold from %d to %.2f"%(self._threshold,new_threshold))
+                        self._threshold = new_threshold
+                        self._logger.info("Changing volume_threshold from %d to %d"%(self.volume_threshold,last_snr))
+                        self.volume_threshold=last_snr
 
     #def listen(self):
     #    # The way this appears to work is that it starts in passive mode and continually grabs small sections of audio and
@@ -292,9 +305,7 @@ class Mic(object):
         self._logger.info("active listen")
         # start with not recording
         recording=False
-        # The volume threshold was originally set to 3, which would be very loud in my case, and the volume would never fall below that.
-        volume_threshold=-40
-        # record until <timeout> second of silence or double <timeout>.
+        # record until <timeout> second of silence or double <timeout> (minimum).
         n = int(round((self._input_rate/self._input_chunksize)*timeout))
         if( indicator ):
             # self.play_file(paths.data('audio', 'beep_hi.wav'))
@@ -308,8 +319,8 @@ class Mic(object):
             frames.append(frame)
             if( len(frames)>4 ):
                 volume=self._snr(frames[-n:])
-                self._logger.info( "volume=%d"%volume)          
-                if( volume>volume_threshold and not recording ):
+                self._logger.info( "volume=%d (of %d)"%(volume,self.volume_threshold) )
+                if( volume>self.volume_threshold and not recording ):
                     recording=True
                     if( len(frames)>n ):
                         frames=frames[-n:]
@@ -320,11 +331,19 @@ class Mic(object):
                     # It would probably make sense to figure this out from the background noise levels in the 
                     # environment.
                     #if len(frames) >= 2*n or (len(frames) > n and self._snr(frames[-n:]) <= 3):
-                    # Also, this is an average of all samples. Seems like we should only use the last second or so
-                    if( len(frames) > 2*n and self._snr(frames[-n:])<=volume_threshold ):
+                    if( (len(frames)>2*n)and(volume<=self.volume_threshold) ):
                         self._logger.debug("max length=%d"%(2*n))
                         self._logger.debug("frames length=%d"%len(frames))
                         break
+                else:
+                    if( (len(frames)>2*n)and(volume<self.volume_threshold) ):
+                        # Threshold might be set too high. Adjust to current value, since
+                        # volume will never fall below background levels, and the cost of
+                        # having Pocketsphinx interpret extra sounds is minimal. 
+                        self._logger.info( "Adjusting threshold from %d to %d"%(self.volume_threshold,volume) )
+                        self.volume_threshold=volume+5
+                        break
+                    
         # self.play_file(paths.data('audio', 'beep_lo.wav'))
         with self._write_frames_to_file(frames) as f:
             if( require_wakeword ):
@@ -349,7 +368,6 @@ class Mic(object):
                             presponse=[]
             else:
                 # if we are not waiting for a wake word, go ahead and use the active engine.
-                # it would be good to have some way of 
                 presponse=self.active_stt_engine.transcribe(f)
                 if( len(presponse) ):
                     self._log_audio(f,str(presponse),"active")

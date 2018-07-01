@@ -90,12 +90,18 @@ class Jasper(object):
         self._logger.debug("Using Audio engine '%s'", audio_engine_slug)
 
         try:
-            active_stt_slug = self.config['stt_engine']
+            stt_slug=self.config['stt_engine']
         except KeyError:
-            active_stt_slug = 'sphinx'
+            # default to pocketsphinx if nothing else selected
+            stt_slug="sphinx"
+            
+        try:
+            active_stt_slug = self.config['stt_active_engine']
+        except KeyError:
+            active_stt_slug = stt_slug
             self._logger.warning("stt_engine not specified in profile, " +
                                  "using defaults.")
-        self._logger.debug("Using STT engine '%s'", active_stt_slug)
+        self._logger.debug("Using active STT engine '%s'", active_stt_slug)
 
         try:
             passive_stt_slug = self.config['stt_passive_engine']
@@ -240,8 +246,7 @@ class Jasper(object):
 
     def list_audio_devices(self):
         for device in self.audio.get_devices():
-            device.print_device_info(
-                verbose=(self._logger.getEffectiveLevel() == logging.DEBUG))
+            device.print_device_info(verbose=(self._logger.getEffectiveLevel() == logging.DEBUG))
 
     def run(self):
         self.conversation.greet()
