@@ -5,6 +5,7 @@
 *.swp
 *.out
 *.kate-swp
+*.wav
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
