@@ -155,8 +155,7 @@ class PhonetisaurusG2P(object):
     def translate(self, words):
         if type(words) is str or len(words) == 1:
             self._logger.debug('Converting single word to phonemes')
-            output = self._translate_word(words if type(words) is str
-                                          else words[0])
+            output = self._translate_word(words if type(words) is str else words[0])
         else:
             self._logger.debug('Converting %d words to phonemes', len(words))
             output = self._translate_words(words)

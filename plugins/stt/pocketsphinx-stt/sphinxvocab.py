@@ -10,6 +10,9 @@ except:
 
 from .g2p import PhonetisaurusG2P
 
+def delete_temp_file(file_to_delete):
+    if False:
+        os.remove(file_to_delete)
 
 def get_languagemodel_path(path):
     """
@@ -109,12 +112,11 @@ def compile_languagemodel(text, output_file):
         vocab_file = f.name
 
     # Create vocab file from text
-    logger.debug("Creating vocab file: '%s'", vocab_file)
+    logger.debug("Creating vocab file: '%s'"%vocab_file)
     cmuclmtk.text2vocab(text, vocab_file)
 
     # Get words from vocab file
-    logger.debug("Getting words from vocab file and removing it " +
-                 "afterwards...")
+    logger.debug("Getting words from vocab file and removing it afterwards...")
     words = []
     with open(vocab_file, 'r') as f:
         for line in f:
@@ -126,11 +128,11 @@ def compile_languagemodel(text, output_file):
         logger.warning('Vocab file seems to be empty!')
 
     # Create language model from text
-    logger.debug("Creating languagemodel file: '%s'", output_file)
+    logger.debug("Creating languagemodel file: '%s'"%output_file)
     cmuclmtk.text2lm(text, output_file, vocab_file=vocab_file)
 
     # Remote the vocab file
-    os.remove(vocab_file)
+    delete_temp_file(vocab_file)
 
     return words
 
@@ -146,7 +148,7 @@ def compile_dictionary(g2pconverter, words, output_file):
     """
     # create the dictionary
     logger = logging.getLogger(__name__)
-    logger.debug("Getting phonemes for %d words...", len(words))
+    logger.debug("Getting phonemes for %d words..."%len(words))
     try:
         phonemes = g2pconverter.translate(words)
     except ValueError as e:
@@ -155,7 +157,7 @@ def compile_dictionary(g2pconverter, words, output_file):
         else:
             raise e
 
-    logger.debug("Creating dict file: '%s'", output_file)
+    logger.debug("Creating dict file: '%s'"%output_file)
     with open(output_file, "w") as f:
         for word, pronounciations in phonemes.items():
             for i, pronounciation in enumerate(pronounciations, start=1):

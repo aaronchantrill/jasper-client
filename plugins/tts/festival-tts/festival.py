@@ -25,28 +25,30 @@ class FestivalTTSPlugin(plugin.TTSPlugin):
         if len(available_voices) == 0:
             raise ValueError('No voices available!')
 
-        self._logger.warning("This TTS plugin doesn't have multilanguage " +
-                             "support!")
+        self._logger.warning("This TTS plugin doesn't have multilanguage support!")
         self._logger.info('Available voices: %s', ', '.join(available_voices))
 
         try:
             voice = self.profile['festival-tts']['voice']
+            self._logger.info( 'Profile Voice: %s'%voice )
         except KeyError:
             voice = None
 
         if voice is None or voice not in available_voices:
             if voice is not None:
-                self._logger.warning("Voice '%s' not available!", voice)
+                self._logger.warning("Voice '%s' not available!"%voice)
             default_voice = self.get_default_voice()
             if default_voice in available_voices:
                 self.voice = default_voice
             else:
                 self.voice = available_voices[0]
-        self._logger.info("Using voice '%s'.", self.voice)
+        else:
+            self.voice=voice
+        self._logger.info("Using voice '%s'."%self.voice)
 
     def execute_scheme_command(self, command):
         cmd = ['festival', '--pipe']
-        self._logger.debug("Executing festival command '%s'", command)
+        self._logger.debug("Executing festival command '%s'"%command)
         with tempfile.SpooledTemporaryFile() as in_f:
             in_f.write(command)
             in_f.seek(0)
@@ -54,13 +56,11 @@ class FestivalTTSPlugin(plugin.TTSPlugin):
                 subprocess.call(cmd, stdin=in_f, stdout=out_f)
                 out_f.seek(0)
                 output = out_f.read().strip()
-        self._logger.debug("Festival command output '%s'",
-                           output.replace('\n', '\\n'))
+        self._logger.debug("Festival command output '%s'"%output.replace('\n', '\\n'))
         return output
 
     def get_voices(self):
-        output = self.execute_scheme_command(
-            '(mapcar (lambda (v) (print v)) (voice.list))')
+        output = self.execute_scheme_command('(mapcar (lambda (v) (print v)) (voice.list))')
         return [l for l in output.splitlines() if l.strip() != '']
 
     def get_default_voice(self):
@@ -76,14 +76,11 @@ class FestivalTTSPlugin(plugin.TTSPlugin):
                 in_f.write(phrase)
                 in_f.seek(0)
                 with tempfile.SpooledTemporaryFile() as err_f:
-                    self._logger.debug(
-                        'Executing %s', ' '.join([pipes.quote(arg)
-                                                  for arg in cmd]))
-                    subprocess.call(cmd, stdin=in_f, stdout=out_f,
-                                    stderr=err_f)
+                    self._logger.debug('Executing %s'%' '.join([pipes.quote(arg) for arg in cmd]))
+                    subprocess.call(cmd, stdin=in_f, stdout=out_f, stderr=err_f)
                     err_f.seek(0)
                     output = err_f.read()
                     if output:
-                        self._logger.debug("Output was: '%s'", output)
+                        self._logger.debug("Output was: '%s'"%output)
             out_f.seek(0)
             return out_f.read()
