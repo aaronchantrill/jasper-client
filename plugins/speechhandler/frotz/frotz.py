@@ -8,6 +8,7 @@ from jasper import plugin
 class FrotzPlugin(plugin.SpeechHandlerPlugin):
     def get_phrases(self):
         return [
+            self.gettext("GAME"),
             self.gettext("BEGIN SIMULATION ZORK ONE"),
             self.gettext("BEGIN SIMULATION MIND FOREVER VOYAGING"),
             self.gettext("BEGIN SIMULATION HITCHHIKERS GUIDE"),
