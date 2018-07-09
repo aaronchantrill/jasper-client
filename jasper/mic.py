@@ -251,8 +251,8 @@ class Mic(object):
                 elif len(frames) >= frames.maxlen:
                     # Threshold SNR not reached. Update threshold with
                     # background noise.
-                    self._logger.info("Changing threshold from %d to %d"%(self.volume_threshold,snr))
-                    self.volume_threshold=snr
+                    self._logger.info("Changing threshold from %d to %d"%(self.volume_threshold,snr+5))
+                    self.volume_threshold=snr+5
             else:
                 # We're recording
                 recording_frames.append(frame)
@@ -271,8 +271,8 @@ class Mic(object):
                         new_threshold=float(audioop.rms(b"",join(frames),2))
                         self._logger.info("Changing threshold from %d to %.2f"%(self._threshold,new_threshold))
                         self._threshold = new_threshold
-                        self._logger.info("Changing volume_threshold from %d to %d"%(self.volume_threshold,last_snr))
-                        self.volume_threshold=last_snr
+                        self._logger.info("Changing volume_threshold from %d to %d"%(self.volume_threshold,last_snr+5))
+                        self.volume_threshold=last_snr+5
 
     #def listen(self):
     #    # The way this appears to work is that it starts in passive mode and continually grabs small sections of audio and
@@ -340,7 +340,7 @@ class Mic(object):
                         # Threshold might be set too high. Adjust to current value, since
                         # volume will never fall below background levels, and the cost of
                         # having Pocketsphinx interpret extra sounds is minimal. 
-                        self._logger.info( "Adjusting threshold from %d to %d"%(self.volume_threshold,volume) )
+                        self._logger.info( "Adjusting threshold from %d to %d"%(self.volume_threshold,volume+5) )
                         self.volume_threshold=volume+5
                         break
                     
@@ -368,6 +368,7 @@ class Mic(object):
                             presponse=[]
             else:
                 # if we are not waiting for a wake word, go ahead and use the active engine.
+                self.play_file(paths.data('audio', 'beep_lo.wav'))
                 presponse=self.active_stt_engine.transcribe(f)
                 if( len(presponse) ):
                     self._log_audio(f,str(presponse[0]),"active")
