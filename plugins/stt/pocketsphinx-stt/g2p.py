@@ -6,18 +6,15 @@ import tempfile
 import logging
 from . import phonemeconversion
 
+def execute(executable, fst_model, input, is_file=False, nbest=None):
+    logger = logging.getLogger(__name__)
 
-RE_WORDS = re.compile(r'(?P<word>[a-zA-Z]+)\s+(?P<precision>\d+\.\d+)\s+' +
+    RE_WORDS = re.compile(r'(?P<word>[a-zA-Z]+)\s+(?P<precision>\d+\.\d+)\s+' +
                       r'(?:(?P<sep><s>\s+)){0,1}(?P<pronounciation>.+)' +
                       r'(?(sep)\s+</s>)',
                       re.MULTILINE)
-RE_ISYMNOTFOUND = re.compile(r'^Symbol: \'(?P<symbol>.+)\' not found in ' +
-                             r'input symbols table')
-
-
-def execute(executable, fst_model, input, is_file=False, nbest=None):
-    logger = logging.getLogger(__name__)
-    
+    RE_ISMYNOTFOUND = re.compile(r'^Symbol: \'(?P<symbol>.+)\' not found in ' +
+                             r'input symbols table')    
     # the newer version of phonetisaurus uses a different filename and a different method
     if( executable=='phonetisaurus-g2pfst' ):
         cmd = [executable,
@@ -58,7 +55,7 @@ def execute(executable, fst_model, input, is_file=False, nbest=None):
             logger.debug("NextLine: '%s'"%nextline)
             if( nextline == '' ):
                 continue
-            if( len(RE_ISYMNOTFOUND.findall(nextline)) > 0 ):
+            if( len(RE_ISMYNOTFOUND.findall(nextline)) > 0 ):
                 # instead of killing the process or raising an error, just skip the line.
                 # this will create the checksum so that jasper won't re-compile the vocabulary
                 # so that I can replace the failed files with ones I build using the 
