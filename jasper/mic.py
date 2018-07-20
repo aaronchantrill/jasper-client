@@ -120,10 +120,12 @@ class Mic(object):
             self._logger.debug('output_padding not configured,' +
                                'using default.')
             output_padding = None
-        if output_padding and output_padding.lower() in ('true', 'yes', 'on'):
-            self._output_padding = True
-        else:
-            self._output_padding = False
+        self._output_padding = False
+        if( type(output_padding) is bool ):
+            self._output_padding = output_padding
+        if( type(output_padding) is str ):
+            if( output_padding.lower() in ('true', 'yes', 'on') ):
+                self._output_padding = True
 
         self._logger.info('Input sample rate: %d Hz', self._input_rate)
         self._logger.info('Input sample width: %d bit', self._input_bits)
