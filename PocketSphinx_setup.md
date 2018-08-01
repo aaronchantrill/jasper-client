@@ -30,6 +30,15 @@ cd
 ```
 
 ## Build and install mitlm-0.4.2:
+Below, when I say "vi x add y" I mean to add the exact line "y" to the file "x" at the logical point.
+
+I added the line "AC_CONFIG_MACRO_DIRS([m4])" to configure.ac on line 12, below "AC_CONFIG_AUX_DUR([build-aux])" and above "AM_INIT_AUTOMAKE([foreign -Wall -Werror])"
+
+I added the line "ACLOCAL_AMFLAGS = -I m4" to Makefile.am on line 11, below "AM_CPPFLAGS = -I$(top_srcdir)/src" and above "AUTOMAKE_OPTIONS = subdir-objects"
+
+It has recently been brought to my attention that this program may not be necessary for the successful functioning of phonetisaurus within Jasper, so I would encourage you to skip this step and let me know if things fail further on below.
+
+I will most likely be testing this with a new SD card on my Raspberry Pi 3B+ within a week or so (today is Aug 1st, 2018) and will remove this section if I determine it is not necessary.
 ```
 sudo apt install git gfortran autoconf-archive
 git clone https://github.com/mitlm/mitlm.git
